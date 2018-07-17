@@ -7,7 +7,6 @@
     },
     "author": "opensource@aerolit.pl",
     "version": "0.1.0",
-    "main": "listal-bot.js",
     "repository": {
         "type": "git",
         "url": "https://github.com/Messere/listal-bot"
