@@ -1,0 +1,47 @@
+{
+    "name": "listal-bot",
+    "description": "Bot to download pictures from listal.com",
+    "preferGlobal": true,
+    "bin": {
+        "listal-bot": "dist/index.js"
+    },
+    "author": "opensource@aerolit.pl",
+    "version": "0.1.0",
+    "main": "listal-bot.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Messere/listal-bot"
+    },
+    "license": "MIT",
+    "keywords": [
+        "listal",
+        "pictures",
+        "download"
+    ],
+    "dependencies": {
+        "command-line-args": "^5.0.2",
+        "command-line-usage": "^5.0.5",
+        "image-downloader": "^3.4.1",
+        "node-fetch": "^2.1.2",
+        "queue": "^4.4.2"
+    },
+    "devDependencies": {
+        "@types/command-line-args": "^5.0.0",
+        "@types/command-line-usage": "^5.0.1",
+        "@types/jasmine": "^2.8.8",
+        "@types/mock-fs": "^3.6.30",
+        "@types/node": "^10.5.2",
+        "@types/node-fetch": "^2.1.1",
+        "@types/std-mocks": "^1.0.0",
+        "jasmine-ts": "^0.2.1",
+        "mock-fs": "^4.5.0",
+        "std-mocks": "^1.0.1",
+        "tslint": "^5.11.0",
+        "typescript": "^2.9.2"
+    },
+    "scripts": {
+        "lint": "tslint --project ./",
+        "compile": "tsc",
+        "test": "jasmine-ts --config=./jasmine.json"
+    }
+}

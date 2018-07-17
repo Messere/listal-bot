@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "preserveConstEnums": true,
+        "rootDir": "./src/",
+        "moduleResolution": "node",
+        "lib": ["es2015"],
+        "outDir": "dist"
+    },
+    "include": [
+        "src/*.ts"
+    ]
+}
