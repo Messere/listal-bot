@@ -46,12 +46,12 @@ var Main = /** @class */ (function () {
         this.fetch = fetch;
         this.queue = queue;
     }
-    Main.prototype.run = function (url, destinationDir, overwriteExisting, concurrentDownloadsNumber, timeoutSeconds, maxRetries) {
+    Main.prototype.run = function (url, destinationDir, overwriteExisting, appendName, concurrentDownloadsNumber, timeoutSeconds, maxRetries) {
         if (concurrentDownloadsNumber === void 0) { concurrentDownloadsNumber = 5; }
         if (timeoutSeconds === void 0) { timeoutSeconds = 10; }
         if (maxRetries === void 0) { maxRetries = 5; }
         return __awaiter(this, void 0, void 0, function () {
-            var imageStats, imageQueue, listalPage, hasNext, images;
+            var imageStats, listalPage, imageQueue, hasNext, images;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -60,8 +60,11 @@ var Main = /** @class */ (function () {
                             success: 0,
                             total: 0,
                         };
-                        imageQueue = new ImageQueue_1.default(imageStats, new ImageDownloader_1.default(this.logger, this.downloader, destinationDir, overwriteExisting), this.logger, this.queue, concurrentDownloadsNumber, timeoutSeconds, maxRetries);
                         listalPage = new ListalPage_1.default(this.fetch, new ListalFileNamingStrategy_1.default(), this.logger, url);
+                        if (appendName) {
+                            destinationDir += "/" + listalPage.getName();
+                        }
+                        imageQueue = new ImageQueue_1.default(imageStats, new ImageDownloader_1.default(this.logger, this.downloader, destinationDir, overwriteExisting), this.logger, this.queue, concurrentDownloadsNumber, timeoutSeconds, maxRetries);
                         this.logger.log("Downloading " + (overwriteExisting ? "all" : "new") + " images of \"" + listalPage.getName() + "\"");
                         hasNext = true;
                         _a.label = 1;

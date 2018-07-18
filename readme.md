@@ -38,6 +38,7 @@ Options
 
   -u, --url <url|name>         listal url to download (e.g. http://www.listal.com/<name>), or simply <name>
   -o, --output <dir>           output directory (will be created if does not exist)
+  -a, --append-name            append name extracted from url to output directory
   -h, --help                   show this help
   -x, --overwrite              overwrite existing files (by default only new files are downloaded)
   -t, --timeout <seconds>      image download timeout in seconds
@@ -64,6 +65,17 @@ Example:
 ```bash
 $ listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures -x
 Downloading all images of "marilyn-monroe"
+ 15% [=====>                         ] Done 1113 of 7418 (errors: 0)
+```
+
+By default `listal-bot` downloads images directly into the directory specified
+with `-o` option, but you can ask it to create subdirectory based on name extracted
+from listal url. Use `-a` option to do that:
+
+```bash
+$ listal-bot -u http://www.listal.com/marilyn-monroe -o ./my-picture-collection -a
+Created destination directory ./my-picture-collection/marilyn-monroe
+Downloading new images of "marilyn-monroe"
  15% [=====>                         ] Done 1113 of 7418 (errors: 0)
 ```
 

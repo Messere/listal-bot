@@ -30,6 +30,7 @@ try {
             args.url,
             args.destinationDir,
             args.overwriteExisting,
+            args.appendName,
             args.concurrentDownloadsNumber,
             args.timeoutSeconds,
             args.retries,

@@ -18,6 +18,13 @@ var ArgumentParser = /** @class */ (function () {
                 typeLabel: "<dir>",
             },
             {
+                alias: "a",
+                defaultValue: false,
+                description: "append name extracted from url to output directory",
+                name: "append-name",
+                type: Boolean,
+            },
+            {
                 alias: "h",
                 defaultValue: false,
                 description: "show this help",
@@ -78,6 +85,7 @@ var ArgumentParser = /** @class */ (function () {
             partial: true,
         });
         return {
+            appendName: options["append-name"],
             concurrentDownloadsNumber: options.concurrency,
             destinationDir: options.output,
             help: options.help,

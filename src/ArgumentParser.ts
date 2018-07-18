@@ -20,6 +20,13 @@ export default class ArgumentParser {
             typeLabel: "<dir>",
         },
         {
+            alias: "a",
+            defaultValue: false,
+            description: "append name extracted from url to output directory",
+            name: "append-name",
+            type: Boolean,
+        },
+        {
             alias: "h",
             defaultValue: false,
             description: "show this help",
@@ -85,6 +92,7 @@ export default class ArgumentParser {
         );
 
         return {
+            appendName: options["append-name"],
             concurrentDownloadsNumber: options.concurrency,
             destinationDir: options.output,
             help: options.help,

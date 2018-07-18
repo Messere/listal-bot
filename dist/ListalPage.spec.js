@@ -72,6 +72,11 @@ describe("Listal page", function () {
         var page = new ListalPage_1.default(fetch, namingStrategy, logger, "http://www.listal.com/som%A9-nam%A9/pictures//5", 5);
         expect(page.getName()).toEqual("som%A9-nam%A9");
     });
+    it("should assume that url is in fact name", function () {
+        var page = new ListalPage_1.default(fetch, namingStrategy, logger, "some-name", 5);
+        expect(page.getName()).toEqual("some-name");
+        expect(page.getUrl()).toEqual("http://www.listal.com/some-name/pictures//5");
+    });
     it("should throw an error if invalid / unrecognized listal url is encountered", function () {
         expect(function () { return new ListalPage_1.default(fetch, namingStrategy, logger, "http://google.com", 5); }).toThrowError("Unrecognized listal url: \"http://google.com\"");
     });

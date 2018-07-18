@@ -148,6 +148,10 @@ var ListalPage = /** @class */ (function () {
         if (match !== null) {
             return match[1];
         }
+        else if (url.match(/^https?:\/\//i) === null) {
+            // name was provided instead of url
+            return url;
+        }
         else {
             throw new Error("Unrecognized listal url: \"" + url + "\"");
         }

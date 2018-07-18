@@ -62,6 +62,18 @@ describe("Listal page", () => {
         expect(page.getName()).toEqual("som%A9-nam%A9");
     });
 
+    it("should assume that url is in fact name", () => {
+        const page = new ListalPage(
+            fetch,
+            namingStrategy,
+            logger,
+            "some-name",
+            5,
+        );
+        expect(page.getName()).toEqual("some-name");
+        expect(page.getUrl()).toEqual("http://www.listal.com/some-name/pictures//5");
+    });
+
     it("should throw an error if invalid / unrecognized listal url is encountered", () => {
         expect(() => new ListalPage(
             fetch,

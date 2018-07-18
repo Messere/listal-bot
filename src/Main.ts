@@ -22,6 +22,7 @@ export default class Main {
         url: string,
         destinationDir: string,
         overwriteExisting: boolean,
+        appendName: boolean,
         concurrentDownloadsNumber: number = 5,
         timeoutSeconds: number = 10,
         maxRetries: number = 5,
@@ -33,6 +34,17 @@ export default class Main {
             total: 0,
         };
 
+        let listalPage = new ListalPage(
+            this.fetch,
+            new ListalFileNamingStrategy(),
+            this.logger,
+            url,
+        );
+
+        if (appendName) {
+            destinationDir += `/${listalPage.getName()}`;
+        }
+
         const imageQueue = new ImageQueue(
             imageStats,
             new ImageDownloader(this.logger, this.downloader, destinationDir, overwriteExisting),
@@ -41,13 +53,6 @@ export default class Main {
             concurrentDownloadsNumber,
             timeoutSeconds,
             maxRetries,
-        );
-
-        let listalPage = new ListalPage(
-            this.fetch,
-            new ListalFileNamingStrategy(),
-            this.logger,
-            url,
         );
 
         this.logger.log(

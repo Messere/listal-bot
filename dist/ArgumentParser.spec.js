@@ -7,8 +7,9 @@ describe("Command line arguments", function () {
         argumentParser = new ArgumentParser_1.default();
     });
     it("should parse short command line options", function () {
-        var args = argumentParser.getArguments(["-u", "abc", "-o", "xyz", "-h", "-x", "-t", "15", "-c", "20", "-r", "100"]);
+        var args = argumentParser.getArguments(["-u", "abc", "-o", "xyz", "-h", "-x", "-t", "15", "-c", "20", "-r", "100", "-a"]);
         expect(args).toEqual({
+            appendName: true,
             concurrentDownloadsNumber: 20,
             destinationDir: "xyz",
             help: true,
@@ -20,8 +21,9 @@ describe("Command line arguments", function () {
     });
     it("should parse long command line options", function () {
         var args = argumentParser.getArguments(["--url", "abc", "--output", "xyz", "--help", "--overwrite",
-            "--timeout", "15", "--concurrency", "20", "--retries", "100"]);
+            "--timeout", "15", "--concurrency", "20", "--retries", "100", "--append-name"]);
         expect(args).toEqual({
+            appendName: true,
             concurrentDownloadsNumber: 20,
             destinationDir: "xyz",
             help: true,
@@ -34,6 +36,7 @@ describe("Command line arguments", function () {
     it("should return only default values", function () {
         var args = argumentParser.getArguments([]);
         expect(args).toEqual({
+            appendName: false,
             concurrentDownloadsNumber: 5,
             destinationDir: undefined,
             help: false,
