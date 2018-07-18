@@ -15,7 +15,7 @@ describe("Listal page", () => {
             return Promise.resolve({
                 ok: true,
                 text: () => Promise.resolve(
-                    readFile.sync("test-fixtures/listal-page.html").toString(),
+                    readFile.sync("tests/fixtures/listal-page.html").toString(),
                 ),
             });
         };
@@ -23,7 +23,7 @@ describe("Listal page", () => {
             return Promise.resolve({
                 ok: true,
                 text: () => Promise.resolve(
-                    readFile.sync("test-fixtures/listal-page-last.html").toString(),
+                    readFile.sync("tests/fixtures/listal-page-last.html").toString(),
                 ),
             });
         };
