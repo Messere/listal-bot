@@ -35,15 +35,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var node_fetch_1 = require("node-fetch");
 var ListalPage = /** @class */ (function () {
-    function ListalPage(namingStrategy, logger, url, pageNumber) {
+    function ListalPage(fetch, namingStrategy, logger, url, pageNumber) {
         if (pageNumber === void 0) { pageNumber = 1; }
         this.pageUrlPattern = "http://www.listal.com/{name}/pictures//{pageNumber}";
         this.fullImageUrlPattern = "http://ilarge.lisimg.com/image/{imageId}/10000full-{name}.jpg";
         this.nextPageFragmentRegexp = /<a href='\/[^\/]+\/pictures\/\/(\d+)'>Next &#187;<\/a>/;
         this.listalPageRegexp = /https?:\/\/www\.listal\.com\/([^\/]+)/i;
         this.imageUrlRegexp = /https?:\/\/www\.listal\.com\/viewimage\/(\d+)/g;
+        this.fetch = fetch;
         this.logger = logger;
         this.namingStrategy = namingStrategy;
         this.name = this.getNameFromUrl(url);
@@ -52,32 +52,39 @@ var ListalPage = /** @class */ (function () {
             .replace("{pageNumber}", pageNumber.toString());
     }
     ListalPage.prototype.getName = function () {
-        return this.name;
+        var name;
+        try {
+            name = decodeURIComponent(this.name);
+        }
+        catch (e) {
+            name = this.name;
+        }
+        return name;
     };
     ListalPage.prototype.getUrl = function () {
         return this.pageUrl;
     };
-    ListalPage.prototype.getImageUrls = function () {
+    ListalPage.prototype.getImages = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var pageContents, imageUrls, match, url;
+            var pageContents, imageInfos, match, url;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.getPageContents()];
                     case 1:
                         pageContents = _a.sent();
-                        imageUrls = [];
+                        imageInfos = [];
                         do {
                             match = this.imageUrlRegexp.exec(pageContents);
                             if (null !== match) {
                                 url = this.fullImageUrlPattern.replace("{name}", this.name).replace("{imageId}", match[1]);
-                                imageUrls.push({
+                                imageInfos.push({
                                     fileName: this.namingStrategy.getFileName(url),
                                     retries: 0,
                                     url: url,
                                 });
                             }
                         } while (match);
-                        return [2 /*return*/, imageUrls];
+                        return [2 /*return*/, imageInfos];
                 }
             });
         });
@@ -97,14 +104,18 @@ var ListalPage = /** @class */ (function () {
     };
     ListalPage.prototype.getNextPage = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var pageContents, nextPageNumber;
+            var pageContents, pageNumberMatch, nextPageNumber;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.getPageContents()];
                     case 1:
                         pageContents = _a.sent();
-                        nextPageNumber = parseInt(pageContents.match(this.nextPageFragmentRegexp)[1], 10);
-                        return [2 /*return*/, Promise.resolve(new ListalPage(this.namingStrategy, this.logger, this.pageUrl, nextPageNumber))];
+                        pageNumberMatch = pageContents.match(this.nextPageFragmentRegexp);
+                        if (pageNumberMatch === null) {
+                            throw new Error("Cannot find next page url");
+                        }
+                        nextPageNumber = parseInt(pageNumberMatch[1], 10);
+                        return [2 /*return*/, Promise.resolve(new ListalPage(this.fetch, this.namingStrategy, this.logger, this.pageUrl, nextPageNumber))];
                 }
             });
         });
@@ -116,7 +127,7 @@ var ListalPage = /** @class */ (function () {
                 switch (_b.label) {
                     case 0:
                         if (!(this.pageContents === undefined)) return [3 /*break*/, 3];
-                        return [4 /*yield*/, node_fetch_1.default(this.pageUrl)];
+                        return [4 /*yield*/, this.fetch(this.pageUrl)];
                     case 1:
                         resource = _b.sent();
                         if (!resource.ok) {
@@ -138,7 +149,7 @@ var ListalPage = /** @class */ (function () {
             return match[1];
         }
         else {
-            return url;
+            throw new Error("Unrecognized listal url: \"" + url + "\"");
         }
     };
     return ListalPage;

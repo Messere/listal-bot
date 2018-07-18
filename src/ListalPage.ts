@@ -1,4 +1,3 @@
-import fetch from "node-fetch";
 import IFileNamingStrategy from "./IFileNamingStrategy";
 import IImageInfo from "./IImageInfo";
 import ILogger from "./ILogger";
@@ -15,13 +14,16 @@ export default class ListalPage {
     private pageContents: string;
     private logger: ILogger;
     private namingStrategy: IFileNamingStrategy;
+    private fetch: any;
 
     constructor(
+        fetch: any,
         namingStrategy: IFileNamingStrategy,
         logger: ILogger,
         url: string,
         pageNumber: number = 1,
     ) {
+        this.fetch = fetch;
         this.logger = logger;
         this.namingStrategy = namingStrategy;
         this.name = this.getNameFromUrl(url);
@@ -32,24 +34,30 @@ export default class ListalPage {
     }
 
     public getName(): string {
-        return this.name;
+        let name;
+        try {
+            name = decodeURIComponent(this.name);
+        } catch (e) {
+            name = this.name;
+        }
+        return name;
     }
 
     public getUrl(): string {
         return this.pageUrl;
     }
 
-    public async getImageUrls(): Promise<IImageInfo[]> {
+    public async getImages(): Promise<IImageInfo[]> {
         const pageContents = await this.getPageContents();
 
-        const imageUrls = [];
+        const imageInfos = [];
 
         let match;
         do {
             match = this.imageUrlRegexp.exec(pageContents);
             if (null !== match) {
                 const url = this.fullImageUrlPattern.replace("{name}", this.name).replace("{imageId}", match[1]);
-                imageUrls.push({
+                imageInfos.push({
                     fileName: this.namingStrategy.getFileName(url),
                     retries: 0,
                     url,
@@ -57,7 +65,7 @@ export default class ListalPage {
             }
         } while (match);
 
-        return imageUrls;
+        return imageInfos;
     }
 
     public async hasNextPage(): Promise<boolean> {
@@ -69,16 +77,19 @@ export default class ListalPage {
 
     public async getNextPage(): Promise<ListalPage> {
         const pageContents = await this.getPageContents();
-        const nextPageNumber =
-            parseInt(pageContents.match(this.nextPageFragmentRegexp)[1], 10);
+        const pageNumberMatch = pageContents.match(this.nextPageFragmentRegexp);
+        if (pageNumberMatch === null) {
+            throw new Error("Cannot find next page url");
+        }
+        const nextPageNumber = parseInt(pageNumberMatch[1], 10);
         return Promise.resolve(
-            new ListalPage(this.namingStrategy, this.logger, this.pageUrl, nextPageNumber),
+            new ListalPage(this.fetch, this.namingStrategy, this.logger, this.pageUrl, nextPageNumber),
         );
     }
 
     private async getPageContents(): Promise<string> {
         if (this.pageContents === undefined) {
-            const resource = await fetch(this.pageUrl);
+            const resource = await this.fetch(this.pageUrl);
             if (!resource.ok) {
                 throw new Error(`Failed to download listal page ${this.pageUrl}, error: ${resource.statusText}`);
             }
@@ -92,7 +103,7 @@ export default class ListalPage {
         if (match !== null) {
             return match[1];
         } else {
-            return url;
+            throw new Error(`Unrecognized listal url: "${url}"`);
         }
     }
 }

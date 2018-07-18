@@ -6,7 +6,7 @@
         "listal-bot": "dist/index.js"
     },
     "author": "opensource@aerolit.pl",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "repository": {
         "type": "git",
         "url": "https://github.com/Messere/listal-bot"
@@ -34,13 +34,14 @@
         "@types/std-mocks": "^1.0.0",
         "jasmine-ts": "^0.2.1",
         "mock-fs": "^4.5.0",
+        "read-file": "^0.2.0",
         "std-mocks": "^1.0.1",
         "tslint": "^5.11.0",
         "typescript": "^2.9.2"
     },
     "scripts": {
         "lint": "tslint --project ./",
-        "compile": "tsc",
+        "compile": "rm dist/* && tsc",
         "test": "jasmine-ts --config=./jasmine.json"
     }
 }

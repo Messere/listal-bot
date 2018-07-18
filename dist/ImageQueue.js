@@ -36,8 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var ImageQueue = /** @class */ (function () {
-    function ImageQueue(imageStats, imageDownloader, logger, concurrentDownloadsNumber, timeoutSeconds, maxRetries) {
-        var queue = require("queue");
+    function ImageQueue(imageStats, imageDownloader, logger, queue, concurrentDownloadsNumber, timeoutSeconds, maxRetries) {
         this.imageQueue = queue({
             autostart: true,
             concurrency: concurrentDownloadsNumber,

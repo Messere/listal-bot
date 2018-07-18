@@ -15,11 +15,11 @@ export default class ImageQueue {
         imageStats: IImageStats,
         imageDownloader: ImageDownloader,
         logger: ILogger,
+        queue: any,
         concurrentDownloadsNumber: number,
         timeoutSeconds: number,
         maxRetries: number,
     ) {
-        const queue = require("queue");
         this.imageQueue = queue({
             autostart: true,
             concurrency: concurrentDownloadsNumber,

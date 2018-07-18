@@ -9,6 +9,12 @@ describe("ListalFileNamingStrategy", function () {
     it("should make the name based on url", function () {
         expect(namingStrategy.getFileName("http://ilarge.lisimg.com/image/123456/1234342full-some-name.jpg")).toEqual("some-name-123456.jpg");
     });
+    it("should decode encoded name in url", function () {
+        expect(namingStrategy.getFileName("http://ilarge.lisimg.com/image/123456/1234342full-som%C3%A9-nam%C3%A9.jpg")).toEqual("somé-namé-123456.jpg");
+    });
+    it("should leave original name if url is encoded not properly", function () {
+        expect(namingStrategy.getFileName("http://ilarge.lisimg.com/image/123456/1234342full-som%A9-nam%A9.jpg")).toEqual("som%A9-nam%A9-123456.jpg");
+    });
     it("should throw an error if url is not recognized", function () {
         expect(function () {
             namingStrategy.getFileName("http://zlarge.lisimg.com/image/123456/1234342full-some-name.jpg");

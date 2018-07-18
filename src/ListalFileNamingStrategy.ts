@@ -8,7 +8,12 @@ export default class ListalFileNamingStrategy implements IFileNamingStrategy {
         if (match === null) {
             throw new Error(`Unrecognized listal image url: ${url}`);
         }
-
-        return `${match[2]}-${match[1]}.jpg`;
+        let name;
+        try {
+            name = decodeURIComponent(match[2]);
+        } catch (e) {
+            name = match[2];
+        }
+        return `${name}-${match[1]}.jpg`;
     }
 }

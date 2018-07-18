@@ -40,16 +40,18 @@ var ImageQueue_1 = require("./ImageQueue");
 var ListalFileNamingStrategy_1 = require("./ListalFileNamingStrategy");
 var ListalPage_1 = require("./ListalPage");
 var Main = /** @class */ (function () {
-    function Main(logger, downloader) {
+    function Main(logger, downloader, fetch, queue) {
         this.logger = logger;
         this.downloader = downloader;
+        this.fetch = fetch;
+        this.queue = queue;
     }
     Main.prototype.run = function (url, destinationDir, overwriteExisting, concurrentDownloadsNumber, timeoutSeconds, maxRetries) {
         if (concurrentDownloadsNumber === void 0) { concurrentDownloadsNumber = 5; }
         if (timeoutSeconds === void 0) { timeoutSeconds = 10; }
         if (maxRetries === void 0) { maxRetries = 5; }
         return __awaiter(this, void 0, void 0, function () {
-            var imageStats, imageQueue, listalPage, hasNext, imageUrls;
+            var imageStats, imageQueue, listalPage, hasNext, images;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -58,19 +60,19 @@ var Main = /** @class */ (function () {
                             success: 0,
                             total: 0,
                         };
-                        imageQueue = new ImageQueue_1.default(imageStats, new ImageDownloader_1.default(this.logger, this.downloader, destinationDir, overwriteExisting), this.logger, concurrentDownloadsNumber, timeoutSeconds, maxRetries);
-                        listalPage = new ListalPage_1.default(new ListalFileNamingStrategy_1.default(), this.logger, url);
+                        imageQueue = new ImageQueue_1.default(imageStats, new ImageDownloader_1.default(this.logger, this.downloader, destinationDir, overwriteExisting), this.logger, this.queue, concurrentDownloadsNumber, timeoutSeconds, maxRetries);
+                        listalPage = new ListalPage_1.default(this.fetch, new ListalFileNamingStrategy_1.default(), this.logger, url);
                         this.logger.log("Downloading " + (overwriteExisting ? "all" : "new") + " images of \"" + listalPage.getName() + "\"");
                         hasNext = true;
                         _a.label = 1;
                     case 1:
                         if (!hasNext) return [3 /*break*/, 6];
-                        return [4 /*yield*/, listalPage.getImageUrls()];
+                        return [4 /*yield*/, listalPage.getImages()];
                     case 2:
-                        imageUrls = _a.sent();
-                        imageStats.total += imageUrls.length;
-                        imageUrls.forEach(function (imageUrl) {
-                            imageQueue.push(imageUrl);
+                        images = _a.sent();
+                        imageStats.total += images.length;
+                        images.forEach(function (imageInfo) {
+                            imageQueue.push(imageInfo);
                         });
                         return [4 /*yield*/, listalPage.hasNextPage()];
                     case 3:

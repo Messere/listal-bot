@@ -10,6 +10,17 @@ Downloading new images of "marilyn-monroe"
  15% [=====>                         ] Done 1113 of 7418 (errors: 0)
 ```
 
+## Installation
+
+Make sure you have `Node` and `npm` installed.
+([https://nodejs.org/](https://nodejs.org/))
+
+Latest version is published to npm repository, install it using
+
+```bash
+npm install listal-bot -g
+```
+
 ## Usage
 
 ```text
@@ -40,7 +51,7 @@ Arguments `-u` (url or name to download) and `-o` (output directory) are mandato
 Example:
 
 ```bash
-listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures
+$ listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures
 Downloading new images of "marilyn-monroe"
  15% [=====>                         ] Done 1113 of 7418 (errors: 0)
 ```
@@ -51,21 +62,12 @@ Add `-x` argument to force redownload all images and overwrite existing ones.
 Example:
 
 ```bash
-listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures -x
+$ listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures -x
 Downloading all images of "marilyn-monroe"
  15% [=====>                         ] Done 1113 of 7418 (errors: 0)
 ```
 
-## Installation
-
-```bash
-npm install listal-bot -g
-```
-
 ## Development
-
-Make sure you have `Node` and `npm` installed
-([https://nodejs.org/](https://nodejs.org/))
 
 Download the code and install dependencies
 
@@ -78,11 +80,13 @@ npm install
 `Listal-bot` is written in [TypeScript](https://www.typescriptlang.org/), for all your
 hacking pleasures.
 
-To compile the code run
+To compile the code, run
 
 ```bash
 npm run compile
 ```
+
+After that, main executable javascript is `dist/index.js`.
 
 To check if your code is clean and conforming to standards, run
 
@@ -94,5 +98,5 @@ To run automated testsuite (written with the help of
 [Jasmine](https://jasmine.github.io/) testing framework), run
 
 ```bash
-npm run test
+npm test
 ```

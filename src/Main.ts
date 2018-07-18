@@ -8,10 +8,14 @@ import ListalPage from "./ListalPage";
 export default class Main {
     private logger: ILogger;
     private downloader;
+    private fetch;
+    private queue;
 
-    constructor(logger: ILogger, downloader: any) {
+    constructor(logger: ILogger, downloader: any, fetch: any, queue: any) {
         this.logger = logger;
         this.downloader = downloader;
+        this.fetch = fetch;
+        this.queue = queue;
     }
 
     public async run(
@@ -33,12 +37,14 @@ export default class Main {
             imageStats,
             new ImageDownloader(this.logger, this.downloader, destinationDir, overwriteExisting),
             this.logger,
+            this.queue,
             concurrentDownloadsNumber,
             timeoutSeconds,
             maxRetries,
         );
 
         let listalPage = new ListalPage(
+            this.fetch,
             new ListalFileNamingStrategy(),
             this.logger,
             url,
@@ -51,11 +57,11 @@ export default class Main {
         let hasNext = true;
 
         while (hasNext) {
-            const imageUrls = await listalPage.getImageUrls();
-            imageStats.total += imageUrls.length;
+            const images = await listalPage.getImages();
+            imageStats.total += images.length;
 
-            imageUrls.forEach((imageUrl) => {
-                imageQueue.push(imageUrl);
+            images.forEach((imageInfo) => {
+                imageQueue.push(imageInfo);
             });
 
             hasNext = await listalPage.hasNextPage();

@@ -1,6 +1,8 @@
 #! /usr/bin/env node
 
 import * as downloader from "image-downloader";
+import fetch from "node-fetch";
+import * as queue from "queue";
 import ArgumentParser from "./ArgumentParser";
 import ConsoleLogger from "./ConsoleLogger";
 import Main from "./Main";
@@ -22,7 +24,7 @@ try {
 
     } else {
 
-        const main = new Main(logger, downloader);
+        const main = new Main(logger, downloader, fetch, queue);
 
         main.run(
             args.url,

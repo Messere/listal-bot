@@ -2,6 +2,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var downloader = require("image-downloader");
+var node_fetch_1 = require("node-fetch");
+var queue = require("queue");
 var ArgumentParser_1 = require("./ArgumentParser");
 var ConsoleLogger_1 = require("./ConsoleLogger");
 var Main_1 = require("./Main");
@@ -17,7 +19,7 @@ try {
         logger.log(argParser.getUsage());
     }
     else {
-        var main = new Main_1.default(logger, downloader);
+        var main = new Main_1.default(logger, downloader, node_fetch_1.default, queue);
         main.run(args.url, args.destinationDir, args.overwriteExisting, args.concurrentDownloadsNumber, args.timeoutSeconds, args.retries).then(function () {
             logger.log("\nFinished");
         }).catch(function (e) {
