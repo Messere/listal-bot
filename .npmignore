@@ -1,0 +1,7 @@
+/src/
+/node_modules/
+jasmine.json
+tsconfig.json
+tslint.json
+/dist/*.spec.js
+.gitignore
