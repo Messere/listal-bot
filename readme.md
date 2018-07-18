@@ -51,7 +51,7 @@ Add `-x` argument to force redownload all images and overwrite existing ones.
 Example:
 
 ```bash
-listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures
+listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures -x
 Downloading all images of "marilyn-monroe"
  15% [=====>                         ] Done 1113 of 7418 (errors: 0)
 ```
