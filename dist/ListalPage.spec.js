@@ -43,20 +43,13 @@ describe("Listal page", function () {
     var namingStrategy;
     var logger;
     var fetch;
-    var fetchLast;
     beforeEach(function () {
         namingStrategy = new ListalFileNamingStrategy_1.default();
         logger = {};
         fetch = function () {
             return Promise.resolve({
                 ok: true,
-                text: function () { return Promise.resolve(readFile.sync("test-fixtures/listal-page.html").toString()); },
-            });
-        };
-        fetchLast = function () {
-            return Promise.resolve({
-                ok: true,
-                text: function () { return Promise.resolve(readFile.sync("test-fixtures/listal-page-last.html").toString()); },
+                text: function () { return Promise.resolve(readFile.sync("tests/fixtures/listal-page.html").toString()); },
             });
         };
     });
@@ -109,67 +102,16 @@ describe("Listal page", function () {
             }
         });
     }); });
-    it("should tell that there's next page", function () { return __awaiter(_this, void 0, void 0, function () {
+    it("should get total number of pages", function () { return __awaiter(_this, void 0, void 0, function () {
         var page, _a;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     page = new ListalPage_1.default(fetch, namingStrategy, logger, "http://www.listal.com/some-name", 5);
                     _a = expect;
-                    return [4 /*yield*/, page.hasNextPage()];
+                    return [4 /*yield*/, page.getTotalPages()];
                 case 1:
-                    _a.apply(void 0, [_b.sent()]).toBeTruthy();
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    it("should get next page", function () { return __awaiter(_this, void 0, void 0, function () {
-        var page, nextPage;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    page = new ListalPage_1.default(fetch, namingStrategy, logger, "http://www.listal.com/some-name", 5);
-                    return [4 /*yield*/, page.getNextPage()];
-                case 1:
-                    nextPage = _a.sent();
-                    expect(nextPage.getUrl()).toEqual("http://www.listal.com/some-name/pictures//2");
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    it("should tell that there's no next page", function () { return __awaiter(_this, void 0, void 0, function () {
-        var page, _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    page = new ListalPage_1.default(fetchLast, namingStrategy, logger, "http://www.listal.com/some-name", 5);
-                    _a = expect;
-                    return [4 /*yield*/, page.hasNextPage()];
-                case 1:
-                    _a.apply(void 0, [_b.sent()]).toBeFalsy();
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    it("should throw error when trying to get next page on last one", function () { return __awaiter(_this, void 0, void 0, function () {
-        var page, error, e_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    page = new ListalPage_1.default(fetchLast, namingStrategy, logger, "http://www.listal.com/some-name", 5);
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, page.getNextPage()];
-                case 2:
-                    _a.sent();
-                    return [3 /*break*/, 4];
-                case 3:
-                    e_1 = _a.sent();
-                    error = e_1;
-                    return [3 /*break*/, 4];
-                case 4:
-                    expect(error).toEqual(new Error("Cannot find next page url"));
+                    _a.apply(void 0, [_b.sent()]).toEqual(371);
                     return [2 /*return*/];
             }
         });

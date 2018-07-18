@@ -31,12 +31,11 @@ try {
             args.destinationDir,
             args.overwriteExisting,
             args.appendName,
-            args.concurrentDownloadsNumber,
+            args.concurrentImageDownloadsNumber,
+            args.concurrentPageDownloadsNumber,
             args.timeoutSeconds,
             args.retries,
-        ).then(() => {
-            logger.log("\nFinished");
-        }).catch((e: Error) => {
+        ).catch((e: Error) => {
             logger.error(`Fatal error: ${e.message}`);
         });
     }

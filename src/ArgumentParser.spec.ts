@@ -9,11 +9,12 @@ describe("Command line arguments", () => {
 
     it ("should parse short command line options", () => {
         const args = argumentParser.getArguments(
-            ["-u", "abc", "-o", "xyz", "-h", "-x", "-t", "15", "-c", "20", "-r", "100", "-a"],
+            ["-u", "abc", "-o", "xyz", "-h", "-x", "-t", "15", "-c", "20", "-p", "30", "-r", "100", "-a"],
         );
         expect(args).toEqual({
             appendName: true,
-            concurrentDownloadsNumber: 20,
+            concurrentImageDownloadsNumber: 20,
+            concurrentPageDownloadsNumber: 30,
             destinationDir: "xyz",
             help: true,
             overwriteExisting: true,
@@ -26,11 +27,13 @@ describe("Command line arguments", () => {
     it ("should parse long command line options", () => {
         const args = argumentParser.getArguments(
             ["--url", "abc", "--output", "xyz", "--help", "--overwrite",
-            "--timeout", "15", "--concurrency", "20", "--retries", "100", "--append-name"],
+            "--timeout", "15", "--concurrency", "20", "--page-concurrency", "30",
+            "--retries", "100", "--append-name"],
         );
         expect(args).toEqual({
             appendName: true,
-            concurrentDownloadsNumber: 20,
+            concurrentImageDownloadsNumber: 20,
+            concurrentPageDownloadsNumber: 30,
             destinationDir: "xyz",
             help: true,
             overwriteExisting: true,
@@ -44,7 +47,8 @@ describe("Command line arguments", () => {
         const args = argumentParser.getArguments([]);
         expect(args).toEqual({
             appendName: false,
-            concurrentDownloadsNumber: 5,
+            concurrentImageDownloadsNumber: 15,
+            concurrentPageDownloadsNumber: 5,
             destinationDir: undefined,
             help: false,
             overwriteExisting: false,

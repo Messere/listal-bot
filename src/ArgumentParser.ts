@@ -43,7 +43,7 @@ export default class ArgumentParser {
         {
             alias: "t",
             defaultValue: 10,
-            description: "image download timeout in seconds",
+            description: "image download timeout in seconds (default: 10)",
             name: "timeout",
             type: (value) => {
                 const parsedValue = parseInt(value, 10);
@@ -53,19 +53,30 @@ export default class ArgumentParser {
         },
         {
             alias: "c",
-            defaultValue: 5,
-            description: "number of concurrent image downloads",
+            defaultValue: 15,
+            description: "number of concurrent image downloads (default: 15)",
             name: "concurrency",
             type: (value) => {
                 const parsedValue = parseInt(value, 10);
-                return isNaN(parsedValue) ? 10 : parsedValue;
+                return isNaN(parsedValue) ? 15 : parsedValue;
+            },
+            typeLabel: "<number>",
+        },
+        {
+            alias: "p",
+            defaultValue: 5,
+            description: "number of concurrent page downloads (default: 5)",
+            name: "page-concurrency",
+            type: (value) => {
+                const parsedValue = parseInt(value, 10);
+                return isNaN(parsedValue) ? 5 : parsedValue;
             },
             typeLabel: "<number>",
         },
         {
             alias: "r",
             defaultValue: 5,
-            description: "maximum number of retries after image download error",
+            description: "maximum number of retries after image download error (default: 5)",
             name: "retries",
             type: (value) => {
                 const parsedValue = parseInt(value, 10);
@@ -93,7 +104,8 @@ export default class ArgumentParser {
 
         return {
             appendName: options["append-name"],
-            concurrentDownloadsNumber: options.concurrency,
+            concurrentImageDownloadsNumber: options.concurrency,
+            concurrentPageDownloadsNumber: options["page-concurrency"],
             destinationDir: options.output,
             help: options.help,
             overwriteExisting: options.overwrite,

@@ -5,6 +5,7 @@ export default interface IDownloaderArguments {
     help: boolean;
     overwriteExisting: boolean;
     retries: number;
-    concurrentDownloadsNumber: number;
+    concurrentImageDownloadsNumber: number;
+    concurrentPageDownloadsNumber: number;
     timeoutSeconds: number;
 }

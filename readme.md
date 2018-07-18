@@ -36,14 +36,15 @@ Usage
 
 Options
 
-  -u, --url <url|name>         listal url to download (e.g. http://www.listal.com/<name>), or simply <name>
-  -o, --output <dir>           output directory (will be created if does not exist)
-  -a, --append-name            append name extracted from url to output directory
-  -h, --help                   show this help
-  -x, --overwrite              overwrite existing files (by default only new files are downloaded)
-  -t, --timeout <seconds>      image download timeout in seconds
-  -c, --concurrency <number>   number of concurrent image downloads
-  -r, --retries <number>       maximum number of retries after image download error
+  -u, --url <url|name>              listal url to download (e.g. http://www.listal.com/<name>), or simply <name>
+  -o, --output <dir>                output directory (will be created if does not exist)
+  -a, --append-name                 append name extracted from url to output directory
+  -h, --help                        show this help
+  -x, --overwrite                   overwrite existing files (by default only new files are downloaded)
+  -t, --timeout <seconds>           image download timeout in seconds (default: 10)
+  -c, --concurrency <number>        number of concurrent image downloads (default: 15)
+  -p, --page-concurrency <number>   number of concurrent page downloads (default: 5)
+  -r, --retries <number>            maximum number of retries after image download error (default: 5)
 
 ```
 

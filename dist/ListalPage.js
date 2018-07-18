@@ -43,6 +43,7 @@ var ListalPage = /** @class */ (function () {
         this.nextPageFragmentRegexp = /<a href='\/[^\/]+\/pictures\/\/(\d+)'>Next &#187;<\/a>/;
         this.listalPageRegexp = /https?:\/\/www\.listal\.com\/([^\/]+)/i;
         this.imageUrlRegexp = /https?:\/\/www\.listal\.com\/viewimage\/(\d+)/g;
+        this.pagerUrlRegexp = /[^\/]+\/pictures\/\/(\d+)/g;
         this.fetch = fetch;
         this.logger = logger;
         this.namingStrategy = namingStrategy;
@@ -89,33 +90,25 @@ var ListalPage = /** @class */ (function () {
             });
         });
     };
-    ListalPage.prototype.hasNextPage = function () {
+    ListalPage.prototype.getTotalPages = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var pageContents;
+            var pageContents, totalPages, match, page;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.getPageContents()];
                     case 1:
                         pageContents = _a.sent();
-                        return [2 /*return*/, Promise.resolve(null !== pageContents.match(this.nextPageFragmentRegexp))];
-                }
-            });
-        });
-    };
-    ListalPage.prototype.getNextPage = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var pageContents, pageNumberMatch, nextPageNumber;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.getPageContents()];
-                    case 1:
-                        pageContents = _a.sent();
-                        pageNumberMatch = pageContents.match(this.nextPageFragmentRegexp);
-                        if (pageNumberMatch === null) {
-                            throw new Error("Cannot find next page url");
-                        }
-                        nextPageNumber = parseInt(pageNumberMatch[1], 10);
-                        return [2 /*return*/, Promise.resolve(new ListalPage(this.fetch, this.namingStrategy, this.logger, this.pageUrl, nextPageNumber))];
+                        totalPages = 1;
+                        do {
+                            match = this.pagerUrlRegexp.exec(pageContents);
+                            if (null !== match) {
+                                page = parseInt(match[1], 10);
+                                if (page > totalPages) {
+                                    totalPages = page;
+                                }
+                            }
+                        } while (match);
+                        return [2 /*return*/, Promise.resolve(totalPages)];
                 }
             });
         });

@@ -23,7 +23,8 @@ export default class Main {
         destinationDir: string,
         overwriteExisting: boolean,
         appendName: boolean,
-        concurrentDownloadsNumber: number = 5,
+        concurrentImageDownloadsNumber: number = 15,
+        concurrentPageDownloadsNumber: number = 5,
         timeoutSeconds: number = 10,
         maxRetries: number = 5,
     ) {
@@ -34,7 +35,7 @@ export default class Main {
             total: 0,
         };
 
-        let listalPage = new ListalPage(
+        const firstListalPage = new ListalPage(
             this.fetch,
             new ListalFileNamingStrategy(),
             this.logger,
@@ -42,7 +43,7 @@ export default class Main {
         );
 
         if (appendName) {
-            destinationDir += `/${listalPage.getName()}`;
+            destinationDir += `/${firstListalPage.getName()}`;
         }
 
         const imageQueue = new ImageQueue(
@@ -50,32 +51,40 @@ export default class Main {
             new ImageDownloader(this.logger, this.downloader, destinationDir, overwriteExisting),
             this.logger,
             this.queue,
-            concurrentDownloadsNumber,
+            concurrentImageDownloadsNumber,
             timeoutSeconds,
             maxRetries,
         );
 
         this.logger.log(
-            `Downloading ${overwriteExisting ? "all" : "new"} images of "${listalPage.getName()}"`,
+            `Downloading ${overwriteExisting ? "all" : "new"} images of "${firstListalPage.getName()}"`,
         );
 
-        let hasNext = true;
+        const pageQueue = this.queue({
+            autostart: true,
+            concurrency: concurrentPageDownloadsNumber,
+            timeout: timeoutSeconds * 1000,
+        });
 
-        while (hasNext) {
-            const images = await listalPage.getImages();
-            imageStats.total += images.length;
+        const totalPages = await firstListalPage.getTotalPages();
 
-            images.forEach((imageInfo) => {
-                imageQueue.push(imageInfo);
+        for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
+            pageQueue.push(async () => {
+                const listalPage = new ListalPage(
+                    this.fetch,
+                    new ListalFileNamingStrategy(),
+                    this.logger,
+                    url,
+                    pageNumber,
+                );
+                const images = await listalPage.getImages();
+                imageStats.total += images.length;
+                images.forEach((imageInfo) => {
+                    imageQueue.push(imageInfo);
+                });
             });
-
-            hasNext = await listalPage.hasNextPage();
-
-            if (hasNext) {
-                listalPage = await listalPage.getNextPage();
-            }
         }
 
-        return imageQueue.start();
+        return Promise.all([pageQueue.start(), imageQueue.start()]);
     }
 }

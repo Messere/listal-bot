@@ -6,7 +6,6 @@ describe("Listal page", () => {
     let namingStrategy;
     let logger;
     let fetch;
-    let fetchLast;
 
     beforeEach(() => {
         namingStrategy = new ListalFileNamingStrategy();
@@ -16,14 +15,6 @@ describe("Listal page", () => {
                 ok: true,
                 text: () => Promise.resolve(
                     readFile.sync("tests/fixtures/listal-page.html").toString(),
-                ),
-            });
-        };
-        fetchLast = () => {
-            return Promise.resolve({
-                ok: true,
-                text: () => Promise.resolve(
-                    readFile.sync("tests/fixtures/listal-page-last.html").toString(),
                 ),
             });
         };
@@ -120,7 +111,7 @@ describe("Listal page", () => {
         });
     });
 
-    it("should tell that there's next page", async () => {
+    it("should get total number of pages", async () => {
         const page = new ListalPage(
             fetch,
             namingStrategy,
@@ -128,48 +119,6 @@ describe("Listal page", () => {
             "http://www.listal.com/some-name",
             5,
         );
-        expect(await page.hasNextPage()).toBeTruthy();
-    });
-
-    it("should get next page", async () => {
-        const page = new ListalPage(
-            fetch,
-            namingStrategy,
-            logger,
-            "http://www.listal.com/some-name",
-            5,
-        );
-        const nextPage = await page.getNextPage();
-        expect(nextPage.getUrl()).toEqual("http://www.listal.com/some-name/pictures//2");
-    });
-
-    it("should tell that there's no next page", async () => {
-        const page = new ListalPage(
-            fetchLast,
-            namingStrategy,
-            logger,
-            "http://www.listal.com/some-name",
-            5,
-        );
-        expect(await page.hasNextPage()).toBeFalsy();
-    });
-
-    it("should throw error when trying to get next page on last one", async () => {
-        const page = new ListalPage(
-            fetchLast,
-            namingStrategy,
-            logger,
-            "http://www.listal.com/some-name",
-            5,
-        );
-
-        let error;
-        try {
-            await page.getNextPage();
-        } catch (e) {
-            error = e;
-        }
-
-        expect(error).toEqual(new Error("Cannot find next page url"));
+        expect(await page.getTotalPages()).toEqual(371);
     });
 });

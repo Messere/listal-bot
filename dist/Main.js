@@ -46,12 +46,14 @@ var Main = /** @class */ (function () {
         this.fetch = fetch;
         this.queue = queue;
     }
-    Main.prototype.run = function (url, destinationDir, overwriteExisting, appendName, concurrentDownloadsNumber, timeoutSeconds, maxRetries) {
-        if (concurrentDownloadsNumber === void 0) { concurrentDownloadsNumber = 5; }
+    Main.prototype.run = function (url, destinationDir, overwriteExisting, appendName, concurrentImageDownloadsNumber, concurrentPageDownloadsNumber, timeoutSeconds, maxRetries) {
+        if (concurrentImageDownloadsNumber === void 0) { concurrentImageDownloadsNumber = 15; }
+        if (concurrentPageDownloadsNumber === void 0) { concurrentPageDownloadsNumber = 5; }
         if (timeoutSeconds === void 0) { timeoutSeconds = 10; }
         if (maxRetries === void 0) { maxRetries = 5; }
         return __awaiter(this, void 0, void 0, function () {
-            var imageStats, listalPage, imageQueue, hasNext, images;
+            var imageStats, firstListalPage, imageQueue, pageQueue, totalPages, _loop_1, pageNumber;
+            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -60,33 +62,43 @@ var Main = /** @class */ (function () {
                             success: 0,
                             total: 0,
                         };
-                        listalPage = new ListalPage_1.default(this.fetch, new ListalFileNamingStrategy_1.default(), this.logger, url);
+                        firstListalPage = new ListalPage_1.default(this.fetch, new ListalFileNamingStrategy_1.default(), this.logger, url);
                         if (appendName) {
-                            destinationDir += "/" + listalPage.getName();
+                            destinationDir += "/" + firstListalPage.getName();
                         }
-                        imageQueue = new ImageQueue_1.default(imageStats, new ImageDownloader_1.default(this.logger, this.downloader, destinationDir, overwriteExisting), this.logger, this.queue, concurrentDownloadsNumber, timeoutSeconds, maxRetries);
-                        this.logger.log("Downloading " + (overwriteExisting ? "all" : "new") + " images of \"" + listalPage.getName() + "\"");
-                        hasNext = true;
-                        _a.label = 1;
-                    case 1:
-                        if (!hasNext) return [3 /*break*/, 6];
-                        return [4 /*yield*/, listalPage.getImages()];
-                    case 2:
-                        images = _a.sent();
-                        imageStats.total += images.length;
-                        images.forEach(function (imageInfo) {
-                            imageQueue.push(imageInfo);
+                        imageQueue = new ImageQueue_1.default(imageStats, new ImageDownloader_1.default(this.logger, this.downloader, destinationDir, overwriteExisting), this.logger, this.queue, concurrentImageDownloadsNumber, timeoutSeconds, maxRetries);
+                        this.logger.log("Downloading " + (overwriteExisting ? "all" : "new") + " images of \"" + firstListalPage.getName() + "\"");
+                        pageQueue = this.queue({
+                            autostart: true,
+                            concurrency: concurrentPageDownloadsNumber,
+                            timeout: timeoutSeconds * 1000,
                         });
-                        return [4 /*yield*/, listalPage.hasNextPage()];
-                    case 3:
-                        hasNext = _a.sent();
-                        if (!hasNext) return [3 /*break*/, 5];
-                        return [4 /*yield*/, listalPage.getNextPage()];
-                    case 4:
-                        listalPage = _a.sent();
-                        _a.label = 5;
-                    case 5: return [3 /*break*/, 1];
-                    case 6: return [2 /*return*/, imageQueue.start()];
+                        return [4 /*yield*/, firstListalPage.getTotalPages()];
+                    case 1:
+                        totalPages = _a.sent();
+                        _loop_1 = function (pageNumber) {
+                            pageQueue.push(function () { return __awaiter(_this, void 0, void 0, function () {
+                                var listalPage, images;
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            listalPage = new ListalPage_1.default(this.fetch, new ListalFileNamingStrategy_1.default(), this.logger, url, pageNumber);
+                                            return [4 /*yield*/, listalPage.getImages()];
+                                        case 1:
+                                            images = _a.sent();
+                                            imageStats.total += images.length;
+                                            images.forEach(function (imageInfo) {
+                                                imageQueue.push(imageInfo);
+                                            });
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); });
+                        };
+                        for (pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
+                            _loop_1(pageNumber);
+                        }
+                        return [2 /*return*/, Promise.all([pageQueue.start(), imageQueue.start()])];
                 }
             });
         });

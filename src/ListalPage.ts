@@ -8,6 +8,7 @@ export default class ListalPage {
     private readonly nextPageFragmentRegexp = /<a href='\/[^\/]+\/pictures\/\/(\d+)'>Next &#187;<\/a>/;
     private readonly listalPageRegexp = /https?:\/\/www\.listal\.com\/([^\/]+)/i;
     private readonly imageUrlRegexp = /https?:\/\/www\.listal\.com\/viewimage\/(\d+)/g;
+    private readonly pagerUrlRegexp = /[^\/]+\/pictures\/\/(\d+)/g;
 
     private name: string;
     private pageUrl: string;
@@ -68,23 +69,23 @@ export default class ListalPage {
         return imageInfos;
     }
 
-    public async hasNextPage(): Promise<boolean> {
+    public async getTotalPages(): Promise<number> {
         const pageContents = await this.getPageContents();
-        return Promise.resolve(
-            null !== pageContents.match(this.nextPageFragmentRegexp),
-        );
-    }
 
-    public async getNextPage(): Promise<ListalPage> {
-        const pageContents = await this.getPageContents();
-        const pageNumberMatch = pageContents.match(this.nextPageFragmentRegexp);
-        if (pageNumberMatch === null) {
-            throw new Error("Cannot find next page url");
-        }
-        const nextPageNumber = parseInt(pageNumberMatch[1], 10);
-        return Promise.resolve(
-            new ListalPage(this.fetch, this.namingStrategy, this.logger, this.pageUrl, nextPageNumber),
-        );
+        let totalPages = 1;
+
+        let match;
+        do {
+            match = this.pagerUrlRegexp.exec(pageContents);
+            if (null !== match) {
+                const page = parseInt(match[1], 10);
+                if (page > totalPages) {
+                    totalPages = page;
+                }
+            }
+        } while (match);
+
+        return Promise.resolve(totalPages);
     }
 
     private async getPageContents(): Promise<string> {
