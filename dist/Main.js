@@ -46,11 +46,7 @@ var Main = /** @class */ (function () {
         this.fetch = fetch;
         this.queue = queue;
     }
-    Main.prototype.run = function (url, destinationDir, overwriteExisting, appendName, minPageNumber, maxPageNumber, concurrentImageDownloadsNumber, concurrentPageDownloadsNumber, timeoutSeconds, maxRetries) {
-        if (concurrentImageDownloadsNumber === void 0) { concurrentImageDownloadsNumber = 15; }
-        if (concurrentPageDownloadsNumber === void 0) { concurrentPageDownloadsNumber = 5; }
-        if (timeoutSeconds === void 0) { timeoutSeconds = 10; }
-        if (maxRetries === void 0) { maxRetries = 5; }
+    Main.prototype.run = function (downloaderArguments) {
         return __awaiter(this, void 0, void 0, function () {
             var imageStats, firstListalPage, imageQueue, pageQueue, totalPages, _loop_1, pageNumber;
             var _this = this;
@@ -62,16 +58,14 @@ var Main = /** @class */ (function () {
                             success: 0,
                             total: 0,
                         };
-                        firstListalPage = new ListalPage_1.default(this.fetch, new ListalFileNamingStrategy_1.default(), url);
-                        if (appendName) {
-                            destinationDir += "/" + firstListalPage.getName();
-                        }
-                        imageQueue = new ImageQueue_1.default(imageStats, new ImageDownloader_1.default(this.logger, this.downloader, destinationDir, overwriteExisting), this.logger, this.queue, concurrentImageDownloadsNumber, timeoutSeconds, maxRetries);
-                        this.logger.log("Downloading " + (overwriteExisting ? "all" : "new") + " images of \"" + firstListalPage.getName() + "\"");
+                        firstListalPage = new ListalPage_1.default(this.fetch, new ListalFileNamingStrategy_1.default(), downloaderArguments.url);
+                        imageQueue = new ImageQueue_1.default(imageStats, new ImageDownloader_1.default(this.logger, this.downloader, this.getDestinationDir(firstListalPage, downloaderArguments), downloaderArguments.overwriteExisting), this.logger, this.queue, downloaderArguments.concurrentImageDownloadsNumber, downloaderArguments.timeoutSeconds, downloaderArguments.retries);
+                        this.logger.log("Downloading " + (downloaderArguments.overwriteExisting ? "all" : "new") +
+                            (" images of " + firstListalPage.getCategory() + " \"" + firstListalPage.getName() + "\""));
                         pageQueue = this.queue({
                             autostart: true,
-                            concurrency: concurrentPageDownloadsNumber,
-                            timeout: timeoutSeconds * 1000,
+                            concurrency: downloaderArguments.concurrentPageDownloadsNumber,
+                            timeout: downloaderArguments.timeoutSeconds * 1000,
                         });
                         return [4 /*yield*/, firstListalPage.getTotalPages()];
                     case 1:
@@ -82,7 +76,7 @@ var Main = /** @class */ (function () {
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {
                                         case 0:
-                                            listalPage = new ListalPage_1.default(this.fetch, new ListalFileNamingStrategy_1.default(), url, pageNumber);
+                                            listalPage = new ListalPage_1.default(this.fetch, new ListalFileNamingStrategy_1.default(), downloaderArguments.url, pageNumber);
                                             return [4 /*yield*/, listalPage.getImages()];
                                         case 1:
                                             images = _a.sent();
@@ -95,7 +89,8 @@ var Main = /** @class */ (function () {
                                 });
                             }); });
                         };
-                        for (pageNumber = minPageNumber < 1 ? 1 : minPageNumber; pageNumber <= totalPages && (maxPageNumber === null || pageNumber <= maxPageNumber); pageNumber++) {
+                        for (pageNumber = downloaderArguments.minPageNumber < 1 ? 1 : downloaderArguments.minPageNumber; pageNumber <= totalPages &&
+                            (downloaderArguments.maxPageNumber === null || pageNumber <= downloaderArguments.maxPageNumber); pageNumber++) {
                             _loop_1(pageNumber);
                         }
                         return [2 /*return*/, new Promise(function (resolve) {
@@ -116,6 +111,16 @@ var Main = /** @class */ (function () {
                 }
             });
         });
+    };
+    Main.prototype.getDestinationDir = function (listalPage, downloaderArguments) {
+        var destinationDir = downloaderArguments.destinationDir;
+        if (downloaderArguments.appendCategory) {
+            destinationDir += "/" + listalPage.getCategory();
+        }
+        if (downloaderArguments.appendName) {
+            destinationDir += "/" + listalPage.getName();
+        }
+        return destinationDir;
     };
     return Main;
 }());

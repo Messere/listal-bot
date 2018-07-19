@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs_1 = require("fs");
+var mkdirp_1 = require("mkdirp");
 var ImageDownloader = /** @class */ (function () {
     function ImageDownloader(logger, downloader, destinationDirectory, overwriteExistingImages) {
         if (overwriteExistingImages === void 0) { overwriteExistingImages = false; }
@@ -63,7 +64,7 @@ var ImageDownloader = /** @class */ (function () {
     };
     ImageDownloader.prototype.createDirectoryIfDoesNotExist = function (directory) {
         if (!fs_1.existsSync(directory)) {
-            fs_1.mkdirSync(directory);
+            mkdirp_1.sync(directory);
             this.logger.log("Created destination directory " + directory);
         }
         else if (!fs_1.lstatSync(directory).isDirectory()) {

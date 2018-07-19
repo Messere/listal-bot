@@ -20,9 +20,10 @@ describe("Image downloader", function () {
         mockFs.restore();
     });
     it("should create destination directory if it does not exist", function () {
-        expect(fs_1.existsSync("output2")).toBeFalsy();
-        var imageDownloader = new ImageDownloader_1.default(logger, downloader, "output2");
-        expect(fs_1.existsSync("output2")).toBeTruthy();
+        var dir = "output2/subdir1/subdir2";
+        expect(fs_1.existsSync(dir)).toBeFalsy();
+        var imageDownloader = new ImageDownloader_1.default(logger, downloader, dir);
+        expect(fs_1.existsSync(dir)).toBeTruthy();
     });
     it("should throw error if destination path is not a directory", function () {
         expect(function () {

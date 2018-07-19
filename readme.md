@@ -1,14 +1,27 @@
 # Listal-bot
 
 `Listal-bot` is a simple command line tool that allows downloading all images
-from given [Listal](http://www.listal.com) page:
+from given [Listal](http://www.listal.com) page.
 
-```text
+It supports downloading of person images:
+
+```bash
 $ listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures
 Created destination directory ./mm-pictures
-Downloading new images of "marilyn-monroe"
+Downloading new images of person "marilyn-monroe"
  15% [=====>                         ] Done 1113 of 7418 (errors: 0)
 ```
+
+as well as images from other categories:
+
+```bash
+$ listal-bot -u http://www.listal.com/movie/batman -o ./batman-pictures
+Created destination directory ./batman-pictures
+Downloading new images of movie "batman"
+  9% [===>                           ] Done 18 of 210 (errors: 0)
+```
+
+**Note**: lists are not supported yet.
 
 ## Installation
 
@@ -41,15 +54,16 @@ Options
   -u, --url <url|name>              Listal URL to download (e.g. http://www.listal.com/<name>), or simply <name>
   -o, --output <dir>                output directory (will be created if does not exist)
   -a, --append-name                 append name extracted from URL to output directory
-  -l, --limit-to                    download only from a single page (-l 5), a range of pages (-l 3:6), from page to
-                                    the end (-l 7:) or from the start to a page (-l :12)
+  -k, --append-category             append category extracted from URL to output directory
+  -b, --append-category-name        append category and name extracted from URL to output directory
+  -l, --limit-to                    download only from a single page (-l 5), a range of pages (-l 3:6), from page
+                                    to the end (-l 7:) or from the start to a page (-l :12)
   -x, --overwrite                   overwrite existing files (by default only new files are downloaded)
   -h, --help                        show this help
   -t, --timeout <seconds>           image download timeout in seconds (default: 10)
   -c, --concurrency <number>        number of concurrent image downloads (default: 15)
   -p, --page-concurrency <number>   number of concurrent page downloads (default: 5)
   -r, --retries <number>            maximum number of retries after image download error (default: 5)
-
 ```
 
 Arguments `-u` (URL or name to download) and `-o` (output directory) are mandatory.
@@ -58,7 +72,7 @@ Example:
 
 ```bash
 $ listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures
-Downloading new images of "marilyn-monroe"
+Downloading new images of person "marilyn-monroe"
  15% [=====>                         ] Done 1113 of 7418 (errors: 0)
 ```
 
@@ -71,20 +85,34 @@ Example:
 
 ```bash
 $ listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures -x
-Downloading all images of "marilyn-monroe"
+Downloading all images of person "marilyn-monroe"
  15% [=====>                         ] Done 1113 of 7418 (errors: 0)
 ```
 
 ### Automatically creating subdirectories
 
 By default `listal-bot` downloads images directly into the directory specified
-with `-o` option, but you can ask it to create subdirectory based on name extracted
-from Listal URL. Use `-a` option to do that:
+with `-o` option, but you can ask it to create subdirectory based on category and/or name extracted
+from Listal URL. Use one of `-a`, `-k` or `-b` options to do that:
 
 ```bash
 $ listal-bot -u http://www.listal.com/marilyn-monroe -o ./my-picture-collection -a
 Created destination directory ./my-picture-collection/marilyn-monroe
-Downloading new images of "marilyn-monroe"
+Downloading new images of person "marilyn-monroe"
+ 15% [=====>                         ] Done 1113 of 7418 (errors: 0)
+```
+
+```bash
+$ listal-bot -u http://www.listal.com/marilyn-monroe -o ./my-picture-collection -k
+Created destination directory ./my-picture-collection/person
+Downloading new images of person "marilyn-monroe"
+ 15% [=====>                         ] Done 1113 of 7418 (errors: 0)
+```
+
+```bash
+$ listal-bot -u http://www.listal.com/marilyn-monroe -o ./my-picture-collection -b
+Created destination directory ./my-picture-collection/person/marilyn-monroe
+Downloading new images of person "marilyn-monroe"
  15% [=====>                         ] Done 1113 of 7418 (errors: 0)
 ```
 
@@ -101,7 +129,7 @@ To download only most recent images (from first 5 pages):
 ```bash
 $ listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures -l :5
 Created destination directory ./mm-pictures
-Downloading new images of "marilyn-monroe"
+Downloading new images of person "marilyn-monroe"
  20% [======>                        ] Done 20 of 100 (errors: 0)
 ```
 
@@ -110,7 +138,7 @@ To download only the oldest images:
 ```bash
 $ listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures -l 370:
 Created destination directory ./mm-pictures
-Downloading new images of "marilyn-monroe"
+Downloading new images of person "marilyn-monroe"
  59% [==================>            ] Done 22 of 37 (errors: 0)
 ```
 
@@ -119,7 +147,7 @@ To download images only from one specific page:
 ```bash
 $ listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures -l 17
 Created destination directory ./mm-pictures
-Downloading new images of "marilyn-monroe"
+Downloading new images of person "marilyn-monroe"
  75% [=======================>       ] Done 15 of 20 (errors: 0)
 ```
 
@@ -128,7 +156,7 @@ Or from a specific range of pages:
 ```bash
 $ listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures -l 17:21
 Created destination directory ./mm-pictures
-Downloading new images of "marilyn-monroe"
+Downloading new images of person "marilyn-monroe"
  29% [=========>                     ] Done 29 of 100 (errors: 0)
 ```
 

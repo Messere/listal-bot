@@ -1,4 +1,5 @@
-import { existsSync,  lstatSync, mkdirSync } from "fs";
+import { existsSync, lstatSync } from "fs";
+import { sync as mkdirSync } from "mkdirp";
 import IImageInfo from "./IImageInfo";
 import ILogger from "./ILogger";
 

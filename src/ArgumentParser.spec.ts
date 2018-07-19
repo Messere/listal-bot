@@ -9,10 +9,11 @@ describe("Command line arguments", () => {
 
     it ("should parse short command line options", () => {
         const args = argumentParser.getArguments(
-            ["-u", "abc", "-o", "xyz", "-h", "-x", "-t", "15",
+            ["-u", "abc", "-o", "xyz", "-h", "-x", "-t", "15", "-k", "-b",
              "-c", "20", "-p", "30", "-r", "100", "-a", "-l", "10:100"],
         );
         expect(args).toEqual({
+            appendCategory: true,
             appendName: true,
             concurrentImageDownloadsNumber: 20,
             concurrentPageDownloadsNumber: 30,
@@ -29,11 +30,13 @@ describe("Command line arguments", () => {
 
     it ("should parse long command line options", () => {
         const args = argumentParser.getArguments(
-            ["--url", "abc", "--output", "xyz", "--help", "--overwrite",
+            ["--url", "abc", "--output", "xyz", "--help", "--overwrite", "--append-category",
             "--timeout", "15", "--concurrency", "20", "--page-concurrency", "30",
-            "--retries", "100", "--append-name", "--limit-to", "10:100"],
+            "--retries", "100", "--append-name", "--limit-to", "10:100",
+            "--append-category-name"],
         );
         expect(args).toEqual({
+            appendCategory: true,
             appendName: true,
             concurrentImageDownloadsNumber: 20,
             concurrentPageDownloadsNumber: 30,
@@ -51,6 +54,7 @@ describe("Command line arguments", () => {
     it ("should return only default values", () => {
         const args = argumentParser.getArguments([]);
         expect(args).toEqual({
+            appendCategory: false,
             appendName: false,
             concurrentImageDownloadsNumber: 15,
             concurrentPageDownloadsNumber: 5,
@@ -140,5 +144,29 @@ describe("Command line arguments", () => {
         expect(() => {
             argumentParser.getArguments(["-u", "zyx", "-o", "qbc", "-l", "1:2:3"]);
         }).toThrowError("Invalid page range in -l/--limit-to option (too many colons)");
+    });
+
+    it ("should set append-name flag", () => {
+        const args = argumentParser.getArguments(
+            ["-u", "zyx", "-o", "qbc", "--append-name"],
+        );
+        expect(args.appendName).toEqual(true);
+        expect(args.appendCategory).toEqual(false);
+    });
+
+    it ("should set append-category flag", () => {
+        const args = argumentParser.getArguments(
+            ["-u", "zyx", "-o", "qbc", "--append-category"],
+        );
+        expect(args.appendName).toEqual(false);
+        expect(args.appendCategory).toEqual(true);
+    });
+
+    it ("should set append-name and append-category flags", () => {
+        const args = argumentParser.getArguments(
+            ["-u", "zyx", "-o", "qbc", "--append-category-name"],
+        );
+        expect(args.appendName).toEqual(true);
+        expect(args.appendCategory).toEqual(true);
     });
 });

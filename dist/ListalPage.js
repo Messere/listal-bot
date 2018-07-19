@@ -37,18 +37,20 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ListalPage = /** @class */ (function () {
     function ListalPage(fetch, namingStrategy, url, pageNumber) {
+        var _a;
         if (pageNumber === void 0) { pageNumber = 1; }
-        this.pageUrlPattern = "http://www.listal.com/{name}/pictures//{pageNumber}";
+        this.pageUrlPattern = "http://www.listal.com/{type}/{name}/pictures/{pageNumber}";
+        this.pagePersonUrlPattern = "http://www.listal.com/{name}/pictures//{pageNumber}";
         this.fullImageUrlPattern = "http://ilarge.lisimg.com/image/{imageId}/10000full-{name}.jpg";
-        this.listalPageRegexp = /https?:\/\/www\.listal\.com\/([^\/]+)/i;
+        this.listalPageRegexp = /https?:\/\/www\.listal\.com\/([a-z_-]+)\/([^\/]+)/i;
+        this.listalPersonPageRegexp = /https?:\/\/www\.listal\.com\/([^\/]+)/i;
         this.imageUrlRegexp = /https?:\/\/www\.listal\.com\/viewimage\/(\d+)/g;
-        this.pagerUrlRegexp = /[^\/]+\/pictures\/\/(\d+)/g;
+        this.pageNumber = pageNumber;
         this.fetch = fetch;
         this.namingStrategy = namingStrategy;
-        this.name = this.getNameFromUrl(url);
-        this.pageUrl = this.pageUrlPattern
-            .replace("{name}", this.encodeName(this.name))
-            .replace("{pageNumber}", pageNumber.toString());
+        _a = this.getTypeAndNameFromUrl(url), this.category = _a[0], this.name = _a[1];
+        this.pageUrl = this.makePageUrl(this.category, this.name, this.pageNumber);
+        this.pagerUrlRegexp = new RegExp((this.category === null ? "" : this.category + "/") + "[^/]+/pictures(?:/+)(\\d+)", "g");
     }
     ListalPage.prototype.getName = function () {
         var name;
@@ -62,6 +64,9 @@ var ListalPage = /** @class */ (function () {
     };
     ListalPage.prototype.getUrl = function () {
         return this.pageUrl;
+    };
+    ListalPage.prototype.getCategory = function () {
+        return this.category === null ? "person" : this.category;
     };
     ListalPage.prototype.getImages = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -95,7 +100,11 @@ var ListalPage = /** @class */ (function () {
             var pageContents, totalPages, match, page;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.getPageContents()];
+                    case 0:
+                        if (this.pageNumber !== 1) {
+                            throw new Error("Only first page contains proper number of pages");
+                        }
+                        return [4 /*yield*/, this.getPageContents()];
                     case 1:
                         pageContents = _a.sent();
                         totalPages = 1;
@@ -136,14 +145,18 @@ var ListalPage = /** @class */ (function () {
             });
         });
     };
-    ListalPage.prototype.getNameFromUrl = function (url) {
+    ListalPage.prototype.getTypeAndNameFromUrl = function (url) {
         var match = url.match(this.listalPageRegexp);
-        if (match !== null) {
-            return match[1];
+        if (match !== null && match[2] !== "picture") {
+            return [match[1], match[2]];
+        }
+        var matchPerson = url.match(this.listalPersonPageRegexp);
+        if (matchPerson !== null) {
+            return [null, matchPerson[1]];
         }
         else if (url.match(/^https?:\/\//i) === null) {
             // name was provided instead of url
-            return url;
+            return [null, url];
         }
         else {
             throw new Error("Unrecognized listal url: \"" + url + "\"");
@@ -151,6 +164,12 @@ var ListalPage = /** @class */ (function () {
     };
     ListalPage.prototype.encodeName = function (name) {
         return /^[\u0000-\u007f]*$/.test(name) ? name : encodeURIComponent(name);
+    };
+    ListalPage.prototype.makePageUrl = function (type, name, pageNumber) {
+        return (type === null ? this.pagePersonUrlPattern : this.pageUrlPattern)
+            .replace("{name}", this.encodeName(name))
+            .replace("{type}", type)
+            .replace("{pageNumber}", pageNumber.toString());
     };
     return ListalPage;
 }());

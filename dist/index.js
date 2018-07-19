@@ -20,7 +20,7 @@ try {
     }
     else {
         var main = new Main_1.default(logger, downloader, node_fetch_1.default, queue);
-        main.run(args.url, args.destinationDir, args.overwriteExisting, args.appendName, args.minPageNumber, args.maxPageNumber, args.concurrentImageDownloadsNumber, args.concurrentPageDownloadsNumber, args.timeoutSeconds, args.retries).then(function () {
+        main.run(args).then(function () {
             logger.log("\nFinished");
         }).catch(function (e) {
             logger.error("\nFatal error: " + e.message);

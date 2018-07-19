@@ -1,3 +1,4 @@
+import IDownloaderArguments from "./IDownloaderArguments";
 import IImageStats from "./IImageStats";
 import ILogger from "./ILogger";
 import ImageDownloader from "./ImageDownloader";
@@ -19,16 +20,7 @@ export default class Main {
     }
 
     public async run(
-        url: string,
-        destinationDir: string,
-        overwriteExisting: boolean,
-        appendName: boolean,
-        minPageNumber: number,
-        maxPageNumber: number,
-        concurrentImageDownloadsNumber: number = 15,
-        concurrentPageDownloadsNumber: number = 5,
-        timeoutSeconds: number = 10,
-        maxRetries: number = 5,
+        downloaderArguments: IDownloaderArguments,
     ) {
 
         const imageStats: IImageStats = {
@@ -40,45 +32,48 @@ export default class Main {
         const firstListalPage = new ListalPage(
             this.fetch,
             new ListalFileNamingStrategy(),
-            url,
+            downloaderArguments.url,
         );
-
-        if (appendName) {
-            destinationDir += `/${firstListalPage.getName()}`;
-        }
 
         const imageQueue = new ImageQueue(
             imageStats,
-            new ImageDownloader(this.logger, this.downloader, destinationDir, overwriteExisting),
+            new ImageDownloader(
+                this.logger,
+                this.downloader,
+                this.getDestinationDir(firstListalPage, downloaderArguments),
+                downloaderArguments.overwriteExisting,
+            ),
             this.logger,
             this.queue,
-            concurrentImageDownloadsNumber,
-            timeoutSeconds,
-            maxRetries,
+            downloaderArguments.concurrentImageDownloadsNumber,
+            downloaderArguments.timeoutSeconds,
+            downloaderArguments.retries,
         );
 
         this.logger.log(
-            `Downloading ${overwriteExisting ? "all" : "new"} images of "${firstListalPage.getName()}"`,
+            `Downloading ${downloaderArguments.overwriteExisting ? "all" : "new"}` +
+            ` images of ${firstListalPage.getCategory()} "${firstListalPage.getName()}"`,
         );
 
         const pageQueue = this.queue({
             autostart: true,
-            concurrency: concurrentPageDownloadsNumber,
-            timeout: timeoutSeconds * 1000,
+            concurrency: downloaderArguments.concurrentPageDownloadsNumber,
+            timeout: downloaderArguments.timeoutSeconds * 1000,
         });
 
         const totalPages = await firstListalPage.getTotalPages();
 
         for (
-            let pageNumber = minPageNumber < 1 ? 1 : minPageNumber;
-            pageNumber <= totalPages && (maxPageNumber === null || pageNumber <= maxPageNumber);
+            let pageNumber = downloaderArguments.minPageNumber < 1 ? 1 : downloaderArguments.minPageNumber;
+            pageNumber <= totalPages &&
+                (downloaderArguments.maxPageNumber === null || pageNumber <= downloaderArguments.maxPageNumber);
             pageNumber++
         ) {
             pageQueue.push(async () => {
                 const listalPage = new ListalPage(
                     this.fetch,
                     new ListalFileNamingStrategy(),
-                    url,
+                    downloaderArguments.url,
                     pageNumber,
                 );
                 const images = await listalPage.getImages();
@@ -104,5 +99,21 @@ export default class Main {
                 }
             }, 1);
         });
+    }
+
+    private getDestinationDir(
+        listalPage: ListalPage,
+        downloaderArguments: IDownloaderArguments,
+    ): string {
+        let destinationDir = downloaderArguments.destinationDir;
+
+        if (downloaderArguments.appendCategory) {
+            destinationDir += `/${listalPage.getCategory()}`;
+        }
+
+        if (downloaderArguments.appendName) {
+            destinationDir += `/${listalPage.getName()}`;
+        }
+        return destinationDir;
     }
 }

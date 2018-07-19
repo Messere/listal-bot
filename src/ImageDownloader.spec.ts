@@ -23,9 +23,10 @@ describe("Image downloader", () => {
     });
 
     it("should create destination directory if it does not exist", () => {
-        expect(existsSync("output2")).toBeFalsy();
-        const imageDownloader = new ImageDownloader(logger, downloader, "output2");
-        expect(existsSync("output2")).toBeTruthy();
+        const dir = "output2/subdir1/subdir2";
+        expect(existsSync(dir)).toBeFalsy();
+        const imageDownloader = new ImageDownloader(logger, downloader, dir);
+        expect(existsSync(dir)).toBeTruthy();
     });
 
     it("should throw error if destination path is not a directory", () => {

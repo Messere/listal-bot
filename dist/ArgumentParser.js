@@ -25,6 +25,20 @@ var ArgumentParser = /** @class */ (function () {
                 type: Boolean,
             },
             {
+                alias: "k",
+                defaultValue: false,
+                description: "append category extracted from URL to output directory",
+                name: "append-category",
+                type: Boolean,
+            },
+            {
+                alias: "b",
+                defaultValue: false,
+                description: "append category and name extracted from URL to output directory",
+                name: "append-category-name",
+                type: Boolean,
+            },
+            {
                 alias: "l",
                 defaultValue: "1:",
                 description: "download only from a single page (-l 5), a range of pages (-l 3:6), from page to" +
@@ -104,7 +118,8 @@ var ArgumentParser = /** @class */ (function () {
             partial: true,
         });
         var downloaderArguments = {
-            appendName: options["append-name"],
+            appendCategory: options["append-category"] || options["append-category-name"],
+            appendName: options["append-name"] || options["append-category-name"],
             concurrentImageDownloadsNumber: options.concurrency,
             concurrentPageDownloadsNumber: options["page-concurrency"],
             destinationDir: options.output,

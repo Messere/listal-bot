@@ -26,22 +26,12 @@ try {
 
         const main = new Main(logger, downloader, fetch, queue);
 
-        main.run(
-            args.url,
-            args.destinationDir,
-            args.overwriteExisting,
-            args.appendName,
-            args.minPageNumber,
-            args.maxPageNumber,
-            args.concurrentImageDownloadsNumber,
-            args.concurrentPageDownloadsNumber,
-            args.timeoutSeconds,
-            args.retries,
-        ).then(() => {
+        main.run(args).then(() => {
             logger.log("\nFinished");
         }).catch((e: Error) => {
             logger.error(`\nFatal error: ${e.message}`);
         });
+
     }
 
 } catch (e) {

@@ -4,33 +4,56 @@ import ListalPage from "./ListalPage";
 
 describe("Listal page", () => {
     let namingStrategy;
-    let fetch;
+    let fetchPerson;
+    let fetchOther;
 
     beforeEach(() => {
         namingStrategy = new ListalFileNamingStrategy();
-        fetch = () => {
+        fetchPerson = () => {
             return Promise.resolve({
                 ok: true,
                 text: () => Promise.resolve(
-                    readFile.sync("tests/fixtures/listal-page.html").toString(),
+                    readFile.sync("tests/fixtures/listal-page-person.html").toString(),
+                ),
+            });
+        };
+        fetchOther = () => {
+            return Promise.resolve({
+                ok: true,
+                text: () => Promise.resolve(
+                    readFile.sync("tests/fixtures/listal-page-other.html").toString(),
                 ),
             });
         };
     });
 
-    it("should properly get page name from url", () => {
+    it("should properly get page name, category and url from person url", () => {
         const page = new ListalPage(
-            fetch,
+            fetchPerson,
             namingStrategy,
             "http://www.listal.com/some-name",
             5,
         );
         expect(page.getName()).toEqual("some-name");
+        expect(page.getCategory()).toEqual("person");
+        expect(page.getUrl()).toEqual("http://www.listal.com/some-name/pictures//5");
+    });
+
+    it("should properly get page name, category and url from other category url", () => {
+        const page = new ListalPage(
+            fetchOther,
+            namingStrategy,
+            "http://www.listal.com/some-category/some-name",
+            5,
+        );
+        expect(page.getName()).toEqual("some-name");
+        expect(page.getCategory()).toEqual("some-category");
+        expect(page.getUrl()).toEqual("http://www.listal.com/some-category/some-name/pictures/5");
     });
 
     it("should properly get encoded page name from url", () => {
         const page = new ListalPage(
-            fetch,
+            fetchPerson,
             namingStrategy,
             "http://www.listal.com/som%C3%A9-nam%C3%A9/pictures",
             5,
@@ -40,7 +63,7 @@ describe("Listal page", () => {
 
     it("should properly get encoded page name from url even if encoding is broken", () => {
         const page = new ListalPage(
-            fetch,
+            fetchPerson,
             namingStrategy,
             "http://www.listal.com/som%A9-nam%A9/pictures//5",
             5,
@@ -50,7 +73,7 @@ describe("Listal page", () => {
 
     it("should assume that url is in fact name", () => {
         const page = new ListalPage(
-            fetch,
+            fetchPerson,
             namingStrategy,
             "some-name",
             5,
@@ -61,26 +84,16 @@ describe("Listal page", () => {
 
     it("should throw an error if invalid / unrecognized listal url is encountered", () => {
         expect(() => new ListalPage(
-            fetch,
+            fetchPerson,
             namingStrategy,
             "http://google.com",
             5,
         )).toThrowError("Unrecognized listal url: \"http://google.com\"");
     });
 
-    it("should get a proper url", () => {
+    it("should parse images from person page", async () => {
         const page = new ListalPage(
-            fetch,
-            namingStrategy,
-            "http://www.listal.com/some-name",
-            5,
-        );
-        expect(page.getUrl()).toEqual("http://www.listal.com/some-name/pictures//5");
-    });
-
-    it("should parse images from page", async () => {
-        const page = new ListalPage(
-            fetch,
+            fetchPerson,
             namingStrategy,
             "http://www.listal.com/som%C3%A9-nam%C3%A9",
             5,
@@ -89,10 +102,9 @@ describe("Listal page", () => {
         const images = await page.getImages();
         expect(images.length).toEqual(20);
 
-        const ids = [
-            16492033, 16368243, 16368242, 16368240, 16368239, 16368142, 16356028, 16352875, 16339090,
-            16339053, 16323685, 16323297, 16323294, 16323293, 16323292, 16323291, 16323290, 16323289, 16323288,
-            16323286,
+        [
+            16492033, 16368243, 16368242, 16368240, 16368239, 16368142, 16356028, 16352875, 16339090, 16339053,
+            16323685, 16323297, 16323294, 16323293, 16323292, 16323291, 16323290, 16323289, 16323288, 16323286,
         ].forEach((id: number, idx: number) => {
             expect(images[idx]).toEqual({
                 fileName: `somé-namé-${id}.jpg`,
@@ -102,23 +114,74 @@ describe("Listal page", () => {
         });
     });
 
-    it("should get total number of pages", async () => {
+    it("should parse images from other page", async () => {
         const page = new ListalPage(
-            fetch,
+            fetchOther,
+            namingStrategy,
+            "http://www.listal.com/som%C3%A9-nam%C3%A9",
+            5,
+        );
+
+        const images = await page.getImages();
+        expect(images.length).toEqual(20);
+
+        [
+            15566198, 15412471, 15412469, 15412468, 15412467, 15412465, 15412464, 15412462, 15412460, 15412458,
+            15412456, 15412449, 15412443, 15412442, 15412434, 15412433, 15366260, 15366258, 15366255, 15366249,
+        ].forEach((id: number, idx: number) => {
+            expect(images[idx]).toEqual({
+                fileName: `somé-namé-${id}.jpg`,
+                retries: 0,
+                url: `http://ilarge.lisimg.com/image/${id}/10000full-som%C3%A9-nam%C3%A9.jpg`,
+            });
+        });
+    });
+
+    it("should get total number of pages from person page", async () => {
+        const page = new ListalPage(
+            fetchPerson,
             namingStrategy,
             "http://www.listal.com/some-name",
-            5,
+            1,
         );
         expect(await page.getTotalPages()).toEqual(371);
     });
 
+    it("should get total number of pages from other page", async () => {
+        const page = new ListalPage(
+            fetchOther,
+            namingStrategy,
+            "http://www.listal.com/movie/batman",
+            1,
+        );
+        expect(await page.getTotalPages()).toEqual(11);
+    });
+
     it("should encode name in url if name contains non-ascii characters", () => {
         const page = new ListalPage(
-            fetch,
+            fetchPerson,
             namingStrategy,
             "somé-namé",
             5,
         );
         expect(page.getUrl()).toEqual("http://www.listal.com/som%C3%A9-nam%C3%A9/pictures//5");
+    });
+
+    it("should throw error if getting total page number from not-first page", async () => {
+        const page = new ListalPage(
+            fetchOther,
+            namingStrategy,
+            "http://www.listal.com/some-category/some-name",
+            2,
+        );
+
+        let error;
+        try {
+            await page.getTotalPages();
+        } catch (e) {
+            error = e;
+        }
+
+        expect(error).toEqual(new Error("Only first page contains proper number of pages"));
     });
 });
