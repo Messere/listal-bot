@@ -25,17 +25,24 @@ var ArgumentParser = /** @class */ (function () {
                 type: Boolean,
             },
             {
-                alias: "h",
-                defaultValue: false,
-                description: "show this help",
-                name: "help",
-                type: Boolean,
+                alias: "l",
+                defaultValue: "1:",
+                description: "download only from single page (-l 5), " +
+                    "range of pages (-l 3:6), from page to the end (-l 7:) or from the start to page (-l :12)",
+                name: "limit-to",
             },
             {
                 alias: "x",
                 defaultValue: false,
                 description: "overwrite existing files (by default only new files are downloaded)",
                 name: "overwrite",
+                type: Boolean,
+            },
+            {
+                alias: "h",
+                defaultValue: false,
+                description: "show this help",
+                name: "help",
                 type: Boolean,
             },
             {
@@ -91,11 +98,12 @@ var ArgumentParser = /** @class */ (function () {
             downloaderArgs.url.length > 0;
     };
     ArgumentParser.prototype.getArguments = function (inputArgs) {
+        var _a;
         var options = commandLineArgs(this.optionDefinitions, {
             argv: inputArgs,
             partial: true,
         });
-        return {
+        var downloaderArguments = {
             appendName: options["append-name"],
             concurrentImageDownloadsNumber: options.concurrency,
             concurrentPageDownloadsNumber: options["page-concurrency"],
@@ -106,6 +114,8 @@ var ArgumentParser = /** @class */ (function () {
             timeoutSeconds: options.timeout,
             url: options.url,
         };
+        _a = this.parsePageRange(options["limit-to"]), downloaderArguments.minPageNumber = _a[0], downloaderArguments.maxPageNumber = _a[1];
+        return downloaderArguments;
     };
     ArgumentParser.prototype.getUsage = function () {
         var sections = [
@@ -123,6 +133,28 @@ var ArgumentParser = /** @class */ (function () {
             },
         ];
         return commandLineUsage(sections);
+    };
+    ArgumentParser.prototype.parsePageRange = function (pageRange) {
+        var rangeParts = pageRange.split(":").map(function (element, idx) {
+            if (idx > 1) {
+                throw new Error("Invalid page range in -l/--limit-to option (too many colons)");
+            }
+            var intPart = parseInt(element, 10);
+            if (element !== "" && isNaN(intPart)) {
+                throw new Error("Invalid page range in -l/--limit-to option (element \"" + element + "\" is not a number)");
+            }
+            return element === "" ? null : intPart;
+        });
+        if (rangeParts.length === 0) {
+            return [1, null];
+        }
+        if (rangeParts[0] === null) {
+            rangeParts[0] = 1;
+        }
+        if (rangeParts.length === 1) {
+            return [rangeParts[0], rangeParts[0]];
+        }
+        return rangeParts;
     };
     return ArgumentParser;
 }());

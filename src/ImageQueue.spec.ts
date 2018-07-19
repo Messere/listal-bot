@@ -119,4 +119,19 @@ describe("Image queue", () => {
         expect(logger.log).toHaveBeenCalledTimes(0);
         expect(logger.progress).toHaveBeenCalledWith(expectedStats);
     });
+
+    it("should return queue length", () => {
+        const imageQueue = createImageQueue(imageDownloaderFailure);
+
+        expect(imageQueue.length).toEqual(0);
+
+        imageQueue.push({
+            fileName: "test.jpg",
+            retries: 1,
+            url: "http://come.and.get.me/",
+        } as IImageInfo);
+
+        expect(imageQueue.length).toEqual(1);
+
+    });
 });

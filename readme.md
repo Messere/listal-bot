@@ -23,7 +23,9 @@ npm install listal-bot -g
 
 ## Usage
 
-```text
+```bash
+$ listal-bot -h
+
 listal-bot
 
   Download all images from listal page.
@@ -39,8 +41,10 @@ Options
   -u, --url <url|name>              listal url to download (e.g. http://www.listal.com/<name>), or simply <name>
   -o, --output <dir>                output directory (will be created if does not exist)
   -a, --append-name                 append name extracted from url to output directory
-  -h, --help                        show this help
+  -l, --limit-to                    download only from single page (-l 5), range of pages (-l 3:6), from page to
+                                    the end (-l 7:) or from the start to page (-l :12)
   -x, --overwrite                   overwrite existing files (by default only new files are downloaded)
+  -h, --help                        show this help
   -t, --timeout <seconds>           image download timeout in seconds (default: 10)
   -c, --concurrency <number>        number of concurrent image downloads (default: 15)
   -p, --page-concurrency <number>   number of concurrent page downloads (default: 5)
@@ -58,6 +62,8 @@ Downloading new images of "marilyn-monroe"
  15% [=====>                         ] Done 1113 of 7418 (errors: 0)
 ```
 
+### Re-downloading already downloaded images
+
 By default program skips images that you already have in specified directory.
 Add `-x` argument to force redownload all images and overwrite existing ones.
 
@@ -69,6 +75,8 @@ Downloading all images of "marilyn-monroe"
  15% [=====>                         ] Done 1113 of 7418 (errors: 0)
 ```
 
+### Automatically creating subdirectories
+
 By default `listal-bot` downloads images directly into the directory specified
 with `-o` option, but you can ask it to create subdirectory based on name extracted
 from listal url. Use `-a` option to do that:
@@ -79,6 +87,53 @@ Created destination directory ./my-picture-collection/marilyn-monroe
 Downloading new images of "marilyn-monroe"
  15% [=====>                         ] Done 1113 of 7418 (errors: 0)
 ```
+
+### Downloading only specified pages
+
+By default `listal-bot` examines all the numbered pages that belong to given subject page.
+If you want to download images only from given subset of pages, use `-l` option, which
+allows to specify single page, or range of pages.
+
+Examples:
+
+To download only most recent images (from first 5 pages):
+
+```bash
+$ listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures -l :5
+Created destination directory ./mm-pictures
+Downloading new images of "marilyn-monroe"
+ 20% [======>                        ] Done 20 of 100 (errors: 0)
+```
+
+To download only oldest images:
+
+```bash
+$ listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures -l 370:
+Created destination directory ./mm-pictures
+Downloading new images of "marilyn-monroe"
+ 59% [==================>            ] Done 22 of 37 (errors: 0)
+```
+
+To download images only from one specific page:
+
+```bash
+$ listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures -l 17
+Created destination directory ./mm-pictures
+Downloading new images of "marilyn-monroe"
+ 75% [=======================>       ] Done 15 of 20 (errors: 0)
+```
+
+Or from specific range of pages:
+
+```bash
+$ listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures -l 17:21
+Created destination directory ./mm-pictures
+Downloading new images of "marilyn-monroe"
+ 29% [=========>                     ] Done 29 of 100 (errors: 0)
+```
+
+Note that only one page range can be specified. You can download more images by running
+the program multiple times with different `-l` parameter values.
 
 ## Development
 

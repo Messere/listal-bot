@@ -20,7 +20,9 @@ try {
     }
     else {
         var main = new Main_1.default(logger, downloader, node_fetch_1.default, queue);
-        main.run(args.url, args.destinationDir, args.overwriteExisting, args.appendName, args.concurrentImageDownloadsNumber, args.concurrentPageDownloadsNumber, args.timeoutSeconds, args.retries).catch(function (e) {
+        main.run(args.url, args.destinationDir, args.overwriteExisting, args.appendName, args.minPageNumber, args.maxPageNumber, args.concurrentImageDownloadsNumber, args.concurrentPageDownloadsNumber, args.timeoutSeconds, args.retries).then(function () {
+            logger.log("\nFinished");
+        }).catch(function (e) {
             logger.error("Fatal error: " + e.message);
         });
     }

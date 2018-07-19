@@ -32,6 +32,10 @@ export default class ImageQueue {
         this.maxRetries = maxRetries;
     }
 
+    get length() {
+        return this.imageQueue.length;
+    }
+
     public push(imageUrl: IImageInfo): void {
         this.imageQueue.push(async () => {
             let result;

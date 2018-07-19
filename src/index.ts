@@ -31,15 +31,19 @@ try {
             args.destinationDir,
             args.overwriteExisting,
             args.appendName,
+            args.minPageNumber,
+            args.maxPageNumber,
             args.concurrentImageDownloadsNumber,
             args.concurrentPageDownloadsNumber,
             args.timeoutSeconds,
             args.retries,
-        ).catch((e: Error) => {
-            logger.error(`Fatal error: ${e.message}`);
+        ).then(() => {
+            logger.log("\nFinished");
+        }).catch((e: Error) => {
+            logger.error(`\nFatal error: ${e.message}`);
         });
     }
 
 } catch (e) {
-    logger.error(`Fatal error: ${e.message}`);
+    logger.error(`\nFatal error: ${e.message}`);
 }

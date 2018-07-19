@@ -27,17 +27,24 @@ export default class ArgumentParser {
             type: Boolean,
         },
         {
-            alias: "h",
-            defaultValue: false,
-            description: "show this help",
-            name: "help",
-            type: Boolean,
+            alias: "l",
+            defaultValue: "1:",
+            description: "download only from single page (-l 5), " +
+                "range of pages (-l 3:6), from page to the end (-l 7:) or from the start to page (-l :12)",
+            name: "limit-to",
         },
         {
             alias: "x",
             defaultValue: false,
             description: "overwrite existing files (by default only new files are downloaded)",
             name: "overwrite",
+            type: Boolean,
+        },
+        {
+            alias: "h",
+            defaultValue: false,
+            description: "show this help",
+            name: "help",
             type: Boolean,
         },
         {
@@ -102,7 +109,7 @@ export default class ArgumentParser {
             },
         );
 
-        return {
+        const downloaderArguments = {
             appendName: options["append-name"],
             concurrentImageDownloadsNumber: options.concurrency,
             concurrentPageDownloadsNumber: options["page-concurrency"],
@@ -112,7 +119,12 @@ export default class ArgumentParser {
             retries: options.retries,
             timeoutSeconds: options.timeout,
             url: options.url,
-        };
+        } as IDownloaderArguments;
+
+        [downloaderArguments.minPageNumber, downloaderArguments.maxPageNumber] =
+            this.parsePageRange(options["limit-to"]);
+
+        return downloaderArguments;
     }
 
     public getUsage(): string {
@@ -131,5 +143,32 @@ export default class ArgumentParser {
             },
         ];
         return commandLineUsage(sections);
+    }
+
+    private parsePageRange(pageRange: string): number[] {
+        const rangeParts = pageRange.split(":").map((element, idx) => {
+            if (idx > 1) {
+                throw new Error("Invalid page range in -l/--limit-to option (too many colons)");
+            }
+            const intPart = parseInt(element, 10);
+            if (element !== "" && isNaN(intPart)) {
+                throw new Error(`Invalid page range in -l/--limit-to option (element "${element}" is not a number)`);
+            }
+            return element === "" ? null : intPart;
+        });
+
+        if (rangeParts.length === 0) {
+            return [1, null];
+        }
+
+        if (rangeParts[0] === null) {
+            rangeParts[0] = 1;
+        }
+
+        if (rangeParts.length === 1) {
+            return [rangeParts[0], rangeParts[0]];
+        }
+
+        return rangeParts;
     }
 }

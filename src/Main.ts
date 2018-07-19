@@ -23,6 +23,8 @@ export default class Main {
         destinationDir: string,
         overwriteExisting: boolean,
         appendName: boolean,
+        minPageNumber: number,
+        maxPageNumber: number,
         concurrentImageDownloadsNumber: number = 15,
         concurrentPageDownloadsNumber: number = 5,
         timeoutSeconds: number = 10,
@@ -68,7 +70,11 @@ export default class Main {
 
         const totalPages = await firstListalPage.getTotalPages();
 
-        for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
+        for (
+            let pageNumber = minPageNumber < 1 ? 1 : minPageNumber;
+            pageNumber <= totalPages && (maxPageNumber === null || pageNumber <= maxPageNumber);
+            pageNumber++
+        ) {
             pageQueue.push(async () => {
                 const listalPage = new ListalPage(
                     this.fetch,
@@ -85,6 +91,20 @@ export default class Main {
             });
         }
 
-        return Promise.all([pageQueue.start(), imageQueue.start()]);
+        return new Promise((resolve) => {
+            const interval = setInterval(() => {
+                // queues look empty
+                if (imageQueue.length === 0 && pageQueue.length === 0) {
+                    // but give them some time...
+                    setTimeout(() => {
+                        // and check again
+                        if (imageQueue.length === 0 && pageQueue.length === 0) {
+                            clearInterval(interval);
+                            resolve();
+                        }
+                    }, 2);
+                }
+            }, 1);
+        });
     }
 }

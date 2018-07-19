@@ -48,6 +48,13 @@ var ImageQueue = /** @class */ (function () {
         this.logger = logger;
         this.maxRetries = maxRetries;
     }
+    Object.defineProperty(ImageQueue.prototype, "length", {
+        get: function () {
+            return this.imageQueue.length;
+        },
+        enumerable: true,
+        configurable: true
+    });
     ImageQueue.prototype.push = function (imageUrl) {
         var _this = this;
         this.imageQueue.push(function () { return __awaiter(_this, void 0, void 0, function () {

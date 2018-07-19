@@ -46,7 +46,7 @@ var Main = /** @class */ (function () {
         this.fetch = fetch;
         this.queue = queue;
     }
-    Main.prototype.run = function (url, destinationDir, overwriteExisting, appendName, concurrentImageDownloadsNumber, concurrentPageDownloadsNumber, timeoutSeconds, maxRetries) {
+    Main.prototype.run = function (url, destinationDir, overwriteExisting, appendName, minPageNumber, maxPageNumber, concurrentImageDownloadsNumber, concurrentPageDownloadsNumber, timeoutSeconds, maxRetries) {
         if (concurrentImageDownloadsNumber === void 0) { concurrentImageDownloadsNumber = 15; }
         if (concurrentPageDownloadsNumber === void 0) { concurrentPageDownloadsNumber = 5; }
         if (timeoutSeconds === void 0) { timeoutSeconds = 10; }
@@ -95,10 +95,24 @@ var Main = /** @class */ (function () {
                                 });
                             }); });
                         };
-                        for (pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
+                        for (pageNumber = minPageNumber < 1 ? 1 : minPageNumber; pageNumber <= totalPages && (maxPageNumber === null || pageNumber <= maxPageNumber); pageNumber++) {
                             _loop_1(pageNumber);
                         }
-                        return [2 /*return*/, Promise.all([pageQueue.start(), imageQueue.start()])];
+                        return [2 /*return*/, new Promise(function (resolve) {
+                                var interval = setInterval(function () {
+                                    // queues look empty
+                                    if (imageQueue.length === 0 && pageQueue.length === 0) {
+                                        // but give them some time...
+                                        setTimeout(function () {
+                                            // and check again
+                                            if (imageQueue.length === 0 && pageQueue.length === 0) {
+                                                clearInterval(interval);
+                                                resolve();
+                                            }
+                                        }, 2);
+                                    }
+                                }, 1);
+                            })];
                 }
             });
         });

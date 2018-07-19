@@ -8,4 +8,6 @@ export default interface IDownloaderArguments {
     concurrentImageDownloadsNumber: number;
     concurrentPageDownloadsNumber: number;
     timeoutSeconds: number;
+    minPageNumber: number;
+    maxPageNumber: number;
 }

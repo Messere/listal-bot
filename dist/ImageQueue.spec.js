@@ -156,4 +156,14 @@ describe("Image queue", function () {
             }
         });
     }); });
+    it("should return queue length", function () {
+        var imageQueue = createImageQueue(imageDownloaderFailure);
+        expect(imageQueue.length).toEqual(0);
+        imageQueue.push({
+            fileName: "test.jpg",
+            retries: 1,
+            url: "http://come.and.get.me/",
+        });
+        expect(imageQueue.length).toEqual(1);
+    });
 });
