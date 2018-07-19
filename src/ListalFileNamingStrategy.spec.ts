@@ -32,4 +32,10 @@ describe("ListalFileNamingStrategy", () => {
             "Unrecognized listal image url: http://zlarge.lisimg.com/image/123456/1234342full-some-name.jpg",
         );
     });
+
+    it("should allow for dot in name", () => {
+        expect(
+            namingStrategy.getFileName("http://ilarge.lisimg.com/image/123456/1234342full-some-name.with.dots.jpg"),
+        ).toEqual("some-name.with.dots-123456.jpg");
+    });
 });

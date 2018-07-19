@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var ListalFileNamingStrategy = /** @class */ (function () {
     function ListalFileNamingStrategy() {
-        this.urlRegex = /https?:\/\/ilarge\.lisimg\.com\/image\/(\d+)\/\d+full-([^.]+)\.jpg/;
+        this.urlRegex = /https?:\/\/ilarge\.lisimg\.com\/image\/(\d+)\/\d+full-(.+)\.jpg/;
     }
     ListalFileNamingStrategy.prototype.getFileName = function (url) {
         var match = url.match(this.urlRegex);
