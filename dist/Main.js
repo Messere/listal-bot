@@ -62,7 +62,7 @@ var Main = /** @class */ (function () {
                             success: 0,
                             total: 0,
                         };
-                        firstListalPage = new ListalPage_1.default(this.fetch, new ListalFileNamingStrategy_1.default(), this.logger, url);
+                        firstListalPage = new ListalPage_1.default(this.fetch, new ListalFileNamingStrategy_1.default(), url);
                         if (appendName) {
                             destinationDir += "/" + firstListalPage.getName();
                         }
@@ -82,7 +82,7 @@ var Main = /** @class */ (function () {
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {
                                         case 0:
-                                            listalPage = new ListalPage_1.default(this.fetch, new ListalFileNamingStrategy_1.default(), this.logger, url, pageNumber);
+                                            listalPage = new ListalPage_1.default(this.fetch, new ListalFileNamingStrategy_1.default(), url, pageNumber);
                                             return [4 /*yield*/, listalPage.getImages()];
                                         case 1:
                                             images = _a.sent();

@@ -4,12 +4,10 @@ import ListalPage from "./ListalPage";
 
 describe("Listal page", () => {
     let namingStrategy;
-    let logger;
     let fetch;
 
     beforeEach(() => {
         namingStrategy = new ListalFileNamingStrategy();
-        logger = {};
         fetch = () => {
             return Promise.resolve({
                 ok: true,
@@ -24,7 +22,6 @@ describe("Listal page", () => {
         const page = new ListalPage(
             fetch,
             namingStrategy,
-            logger,
             "http://www.listal.com/some-name",
             5,
         );
@@ -35,7 +32,6 @@ describe("Listal page", () => {
         const page = new ListalPage(
             fetch,
             namingStrategy,
-            logger,
             "http://www.listal.com/som%C3%A9-nam%C3%A9/pictures",
             5,
         );
@@ -46,7 +42,6 @@ describe("Listal page", () => {
         const page = new ListalPage(
             fetch,
             namingStrategy,
-            logger,
             "http://www.listal.com/som%A9-nam%A9/pictures//5",
             5,
         );
@@ -57,7 +52,6 @@ describe("Listal page", () => {
         const page = new ListalPage(
             fetch,
             namingStrategy,
-            logger,
             "some-name",
             5,
         );
@@ -69,7 +63,6 @@ describe("Listal page", () => {
         expect(() => new ListalPage(
             fetch,
             namingStrategy,
-            logger,
             "http://google.com",
             5,
         )).toThrowError("Unrecognized listal url: \"http://google.com\"");
@@ -79,7 +72,6 @@ describe("Listal page", () => {
         const page = new ListalPage(
             fetch,
             namingStrategy,
-            logger,
             "http://www.listal.com/some-name",
             5,
         );
@@ -90,7 +82,6 @@ describe("Listal page", () => {
         const page = new ListalPage(
             fetch,
             namingStrategy,
-            logger,
             "http://www.listal.com/some-name",
             5,
         );
@@ -115,7 +106,6 @@ describe("Listal page", () => {
         const page = new ListalPage(
             fetch,
             namingStrategy,
-            logger,
             "http://www.listal.com/some-name",
             5,
         );

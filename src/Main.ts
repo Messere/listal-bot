@@ -40,7 +40,6 @@ export default class Main {
         const firstListalPage = new ListalPage(
             this.fetch,
             new ListalFileNamingStrategy(),
-            this.logger,
             url,
         );
 
@@ -79,7 +78,6 @@ export default class Main {
                 const listalPage = new ListalPage(
                     this.fetch,
                     new ListalFileNamingStrategy(),
-                    this.logger,
                     url,
                     pageNumber,
                 );

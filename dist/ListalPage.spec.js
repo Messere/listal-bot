@@ -41,11 +41,9 @@ var ListalFileNamingStrategy_1 = require("./ListalFileNamingStrategy");
 var ListalPage_1 = require("./ListalPage");
 describe("Listal page", function () {
     var namingStrategy;
-    var logger;
     var fetch;
     beforeEach(function () {
         namingStrategy = new ListalFileNamingStrategy_1.default();
-        logger = {};
         fetch = function () {
             return Promise.resolve({
                 ok: true,
@@ -54,27 +52,27 @@ describe("Listal page", function () {
         };
     });
     it("should properly get page name from url", function () {
-        var page = new ListalPage_1.default(fetch, namingStrategy, logger, "http://www.listal.com/some-name", 5);
+        var page = new ListalPage_1.default(fetch, namingStrategy, "http://www.listal.com/some-name", 5);
         expect(page.getName()).toEqual("some-name");
     });
     it("should properly get encoded page name from url", function () {
-        var page = new ListalPage_1.default(fetch, namingStrategy, logger, "http://www.listal.com/som%C3%A9-nam%C3%A9/pictures", 5);
+        var page = new ListalPage_1.default(fetch, namingStrategy, "http://www.listal.com/som%C3%A9-nam%C3%A9/pictures", 5);
         expect(page.getName()).toEqual("somé-namé");
     });
     it("should properly get encoded page name from url even if encoding is broken", function () {
-        var page = new ListalPage_1.default(fetch, namingStrategy, logger, "http://www.listal.com/som%A9-nam%A9/pictures//5", 5);
+        var page = new ListalPage_1.default(fetch, namingStrategy, "http://www.listal.com/som%A9-nam%A9/pictures//5", 5);
         expect(page.getName()).toEqual("som%A9-nam%A9");
     });
     it("should assume that url is in fact name", function () {
-        var page = new ListalPage_1.default(fetch, namingStrategy, logger, "some-name", 5);
+        var page = new ListalPage_1.default(fetch, namingStrategy, "some-name", 5);
         expect(page.getName()).toEqual("some-name");
         expect(page.getUrl()).toEqual("http://www.listal.com/some-name/pictures//5");
     });
     it("should throw an error if invalid / unrecognized listal url is encountered", function () {
-        expect(function () { return new ListalPage_1.default(fetch, namingStrategy, logger, "http://google.com", 5); }).toThrowError("Unrecognized listal url: \"http://google.com\"");
+        expect(function () { return new ListalPage_1.default(fetch, namingStrategy, "http://google.com", 5); }).toThrowError("Unrecognized listal url: \"http://google.com\"");
     });
     it("should get a proper url", function () {
-        var page = new ListalPage_1.default(fetch, namingStrategy, logger, "http://www.listal.com/some-name", 5);
+        var page = new ListalPage_1.default(fetch, namingStrategy, "http://www.listal.com/some-name", 5);
         expect(page.getUrl()).toEqual("http://www.listal.com/some-name/pictures//5");
     });
     it("should parse images from page", function () { return __awaiter(_this, void 0, void 0, function () {
@@ -82,7 +80,7 @@ describe("Listal page", function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    page = new ListalPage_1.default(fetch, namingStrategy, logger, "http://www.listal.com/some-name", 5);
+                    page = new ListalPage_1.default(fetch, namingStrategy, "http://www.listal.com/some-name", 5);
                     return [4 /*yield*/, page.getImages()];
                 case 1:
                     images = _a.sent();
@@ -107,7 +105,7 @@ describe("Listal page", function () {
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    page = new ListalPage_1.default(fetch, namingStrategy, logger, "http://www.listal.com/some-name", 5);
+                    page = new ListalPage_1.default(fetch, namingStrategy, "http://www.listal.com/some-name", 5);
                     _a = expect;
                     return [4 /*yield*/, page.getTotalPages()];
                 case 1:

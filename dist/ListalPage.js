@@ -36,16 +36,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var ListalPage = /** @class */ (function () {
-    function ListalPage(fetch, namingStrategy, logger, url, pageNumber) {
+    function ListalPage(fetch, namingStrategy, url, pageNumber) {
         if (pageNumber === void 0) { pageNumber = 1; }
         this.pageUrlPattern = "http://www.listal.com/{name}/pictures//{pageNumber}";
         this.fullImageUrlPattern = "http://ilarge.lisimg.com/image/{imageId}/10000full-{name}.jpg";
-        this.nextPageFragmentRegexp = /<a href='\/[^\/]+\/pictures\/\/(\d+)'>Next &#187;<\/a>/;
         this.listalPageRegexp = /https?:\/\/www\.listal\.com\/([^\/]+)/i;
         this.imageUrlRegexp = /https?:\/\/www\.listal\.com\/viewimage\/(\d+)/g;
         this.pagerUrlRegexp = /[^\/]+\/pictures\/\/(\d+)/g;
         this.fetch = fetch;
-        this.logger = logger;
         this.namingStrategy = namingStrategy;
         this.name = this.getNameFromUrl(url);
         this.pageUrl = this.pageUrlPattern
