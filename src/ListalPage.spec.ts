@@ -82,7 +82,7 @@ describe("Listal page", () => {
         const page = new ListalPage(
             fetch,
             namingStrategy,
-            "http://www.listal.com/some-name",
+            "http://www.listal.com/som%C3%A9-nam%C3%A9",
             5,
         );
 
@@ -95,9 +95,9 @@ describe("Listal page", () => {
             16323286,
         ].forEach((id: number, idx: number) => {
             expect(images[idx]).toEqual({
-                fileName: `some-name-${id}.jpg`,
+                fileName: `somé-namé-${id}.jpg`,
                 retries: 0,
-                url: `http://ilarge.lisimg.com/image/${id}/10000full-some-name.jpg`,
+                url: `http://ilarge.lisimg.com/image/${id}/10000full-som%C3%A9-nam%C3%A9.jpg`,
             });
         });
     });
@@ -110,5 +110,15 @@ describe("Listal page", () => {
             5,
         );
         expect(await page.getTotalPages()).toEqual(371);
+    });
+
+    it("should encode name in url if name contains non-ascii characters", () => {
+        const page = new ListalPage(
+            fetch,
+            namingStrategy,
+            "somé-namé",
+            5,
+        );
+        expect(page.getUrl()).toEqual("http://www.listal.com/som%C3%A9-nam%C3%A9/pictures//5");
     });
 });

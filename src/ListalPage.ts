@@ -25,7 +25,7 @@ export default class ListalPage {
         this.name = this.getNameFromUrl(url);
 
         this.pageUrl = this.pageUrlPattern
-            .replace("{name}", this.name)
+            .replace("{name}", this.encodeName(this.name))
             .replace("{pageNumber}", pageNumber.toString());
     }
 
@@ -52,7 +52,9 @@ export default class ListalPage {
         do {
             match = this.imageUrlRegexp.exec(pageContents);
             if (null !== match) {
-                const url = this.fullImageUrlPattern.replace("{name}", this.name).replace("{imageId}", match[1]);
+                const url = this.fullImageUrlPattern
+                    .replace("{name}", this.encodeName(this.name))
+                    .replace("{imageId}", match[1]);
                 imageInfos.push({
                     fileName: this.namingStrategy.getFileName(url),
                     retries: 0,
@@ -104,5 +106,9 @@ export default class ListalPage {
         } else {
             throw new Error(`Unrecognized listal url: "${url}"`);
         }
+    }
+
+    private encodeName(name: string): string {
+        return /^[\u0000-\u007f]*$/.test(name) ? name : encodeURIComponent(name);
     }
 }

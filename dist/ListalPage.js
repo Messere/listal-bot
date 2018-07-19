@@ -47,7 +47,7 @@ var ListalPage = /** @class */ (function () {
         this.namingStrategy = namingStrategy;
         this.name = this.getNameFromUrl(url);
         this.pageUrl = this.pageUrlPattern
-            .replace("{name}", this.name)
+            .replace("{name}", this.encodeName(this.name))
             .replace("{pageNumber}", pageNumber.toString());
     }
     ListalPage.prototype.getName = function () {
@@ -75,7 +75,9 @@ var ListalPage = /** @class */ (function () {
                         do {
                             match = this.imageUrlRegexp.exec(pageContents);
                             if (null !== match) {
-                                url = this.fullImageUrlPattern.replace("{name}", this.name).replace("{imageId}", match[1]);
+                                url = this.fullImageUrlPattern
+                                    .replace("{name}", this.encodeName(this.name))
+                                    .replace("{imageId}", match[1]);
                                 imageInfos.push({
                                     fileName: this.namingStrategy.getFileName(url),
                                     retries: 0,
@@ -146,6 +148,9 @@ var ListalPage = /** @class */ (function () {
         else {
             throw new Error("Unrecognized listal url: \"" + url + "\"");
         }
+    };
+    ListalPage.prototype.encodeName = function (name) {
+        return /^[\u0000-\u007f]*$/.test(name) ? name : encodeURIComponent(name);
     };
     return ListalPage;
 }());

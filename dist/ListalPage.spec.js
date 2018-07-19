@@ -80,7 +80,7 @@ describe("Listal page", function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    page = new ListalPage_1.default(fetch, namingStrategy, "http://www.listal.com/some-name", 5);
+                    page = new ListalPage_1.default(fetch, namingStrategy, "http://www.listal.com/som%C3%A9-nam%C3%A9", 5);
                     return [4 /*yield*/, page.getImages()];
                 case 1:
                     images = _a.sent();
@@ -91,9 +91,9 @@ describe("Listal page", function () {
                         16323286,
                     ].forEach(function (id, idx) {
                         expect(images[idx]).toEqual({
-                            fileName: "some-name-" + id + ".jpg",
+                            fileName: "som\u00E9-nam\u00E9-" + id + ".jpg",
                             retries: 0,
-                            url: "http://ilarge.lisimg.com/image/" + id + "/10000full-some-name.jpg",
+                            url: "http://ilarge.lisimg.com/image/" + id + "/10000full-som%C3%A9-nam%C3%A9.jpg",
                         });
                     });
                     return [2 /*return*/];
@@ -114,4 +114,8 @@ describe("Listal page", function () {
             }
         });
     }); });
+    it("should encode name in url if name contains non-ascii characters", function () {
+        var page = new ListalPage_1.default(fetch, namingStrategy, "somé-namé", 5);
+        expect(page.getUrl()).toEqual("http://www.listal.com/som%C3%A9-nam%C3%A9/pictures//5");
+    });
 });
