@@ -1,6 +1,6 @@
 # Listal-bot
 
-`Listal-bot` is a simple command line tool that allows to download all images
+`Listal-bot` is a simple command line tool that allows downloading all images
 from given [Listal](http://www.listal.com) page:
 
 ```text
@@ -15,7 +15,7 @@ Downloading new images of "marilyn-monroe"
 Make sure you have `Node` and `npm` installed.
 ([https://nodejs.org/](https://nodejs.org/))
 
-Latest version is published to npm repository, install it using
+The latest version is published to npm repository, install it using:
 
 ```bash
 npm install listal-bot -g
@@ -28,7 +28,7 @@ $ listal-bot -h
 
 listal-bot
 
-  Download all images from listal page.
+  Download all images from Listal page.
 
 Usage
 
@@ -38,11 +38,11 @@ Usage
 
 Options
 
-  -u, --url <url|name>              listal url to download (e.g. http://www.listal.com/<name>), or simply <name>
+  -u, --url <url|name>              Listal URL to download (e.g. http://www.listal.com/<name>), or simply <name>
   -o, --output <dir>                output directory (will be created if does not exist)
-  -a, --append-name                 append name extracted from url to output directory
-  -l, --limit-to                    download only from single page (-l 5), range of pages (-l 3:6), from page to
-                                    the end (-l 7:) or from the start to page (-l :12)
+  -a, --append-name                 append name extracted from URL to output directory
+  -l, --limit-to                    download only from a single page (-l 5), a range of pages (-l 3:6), from page to
+                                    the end (-l 7:) or from the start to a page (-l :12)
   -x, --overwrite                   overwrite existing files (by default only new files are downloaded)
   -h, --help                        show this help
   -t, --timeout <seconds>           image download timeout in seconds (default: 10)
@@ -52,7 +52,7 @@ Options
 
 ```
 
-Arguments `-u` (url or name to download) and `-o` (output directory) are mandatory.
+Arguments `-u` (URL or name to download) and `-o` (output directory) are mandatory.
 
 Example:
 
@@ -64,7 +64,7 @@ Downloading new images of "marilyn-monroe"
 
 ### Re-downloading already downloaded images
 
-By default program skips images that you already have in specified directory.
+By default, `listal-bot` skips images that you already have in a specified directory.
 Add `-x` argument to force redownload all images and overwrite existing ones.
 
 Example:
@@ -79,7 +79,7 @@ Downloading all images of "marilyn-monroe"
 
 By default `listal-bot` downloads images directly into the directory specified
 with `-o` option, but you can ask it to create subdirectory based on name extracted
-from listal url. Use `-a` option to do that:
+from Listal URL. Use `-a` option to do that:
 
 ```bash
 $ listal-bot -u http://www.listal.com/marilyn-monroe -o ./my-picture-collection -a
@@ -90,9 +90,9 @@ Downloading new images of "marilyn-monroe"
 
 ### Downloading only specified pages
 
-By default `listal-bot` examines all the numbered pages that belong to given subject page.
-If you want to download images only from given subset of pages, use `-l` option, which
-allows to specify single page, or range of pages.
+By default `listal-bot` examines all the numbered pages that belong to the given subject page.
+If you want to download images only from a given subset of pages, use `-l` option, which
+allows specifying a single page, or range of pages.
 
 Examples:
 
@@ -105,7 +105,7 @@ Downloading new images of "marilyn-monroe"
  20% [======>                        ] Done 20 of 100 (errors: 0)
 ```
 
-To download only oldest images:
+To download only the oldest images:
 
 ```bash
 $ listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures -l 370:
@@ -123,7 +123,7 @@ Downloading new images of "marilyn-monroe"
  75% [=======================>       ] Done 15 of 20 (errors: 0)
 ```
 
-Or from specific range of pages:
+Or from a specific range of pages:
 
 ```bash
 $ listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures -l 17:21
@@ -154,7 +154,7 @@ To compile the code, run
 npm run compile
 ```
 
-After that, main executable javascript is `dist/index.js`.
+After that, the main executable javascript is `dist/index.js`.
 
 To check if your code is clean and conforming to standards, run
 
@@ -162,7 +162,7 @@ To check if your code is clean and conforming to standards, run
 npm run lint
 ```
 
-To run automated testsuite (written with the help of
+To run the automated test suite (written with the help of
 [Jasmine](https://jasmine.github.io/) testing framework), run
 
 ```bash

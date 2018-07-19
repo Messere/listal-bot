@@ -23,10 +23,10 @@ try {
         main.run(args.url, args.destinationDir, args.overwriteExisting, args.appendName, args.minPageNumber, args.maxPageNumber, args.concurrentImageDownloadsNumber, args.concurrentPageDownloadsNumber, args.timeoutSeconds, args.retries).then(function () {
             logger.log("\nFinished");
         }).catch(function (e) {
-            logger.error("Fatal error: " + e.message);
+            logger.error("\nFatal error: " + e.message);
         });
     }
 }
 catch (e) {
-    logger.error("Fatal error: " + e.message);
+    logger.error("\nFatal error: " + e.message);
 }

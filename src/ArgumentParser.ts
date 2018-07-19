@@ -9,7 +9,7 @@ export default class ArgumentParser {
     private readonly optionDefinitions: OptionDefinition[] = [
         {
             alias: "u",
-            description: "listal url to download (e.g. http://www.listal.com/<name>), or simply <name>",
+            description: "Listal URL to download (e.g. http://www.listal.com/<name>), or simply <name>",
             name: "url",
             typeLabel: "<url|name>",
         },
@@ -22,15 +22,15 @@ export default class ArgumentParser {
         {
             alias: "a",
             defaultValue: false,
-            description: "append name extracted from url to output directory",
+            description: "append name extracted from URL to output directory",
             name: "append-name",
             type: Boolean,
         },
         {
             alias: "l",
             defaultValue: "1:",
-            description: "download only from single page (-l 5), " +
-                "range of pages (-l 3:6), from page to the end (-l 7:) or from the start to page (-l :12)",
+            description: "download only from a single page (-l 5), a range of pages (-l 3:6), from page to" +
+                " the end (-l 7:) or from the start to a page (-l :12)",
             name: "limit-to",
         },
         {
