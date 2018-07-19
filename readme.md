@@ -12,7 +12,7 @@ Downloading new images of person "marilyn-monroe"
  15% [=====>                         ] Done 1113 of 7418 (errors: 0)
 ```
 
-as well as images from other categories:
+as well as images from other categories (including lists):
 
 ```bash
 $ listal-bot -u http://www.listal.com/movie/batman -o ./batman-pictures
@@ -20,8 +20,6 @@ Created destination directory ./batman-pictures
 Downloading new images of movie "batman"
   9% [===>                           ] Done 18 of 210 (errors: 0)
 ```
-
-**Note**: lists are not supported yet.
 
 ## Installation
 

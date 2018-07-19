@@ -5,6 +5,7 @@ import ImageDownloader from "./ImageDownloader";
 import ImageQueue from "./ImageQueue";
 import ListalFileNamingStrategy from "./ListalFileNamingStrategy";
 import ListalPage from "./ListalPage";
+import ListalPageFactory from "./ListalPageFactory";
 
 export default class Main {
     private logger: ILogger;
@@ -29,11 +30,12 @@ export default class Main {
             total: 0,
         };
 
-        const firstListalPage = new ListalPage(
+        const listalPageFactory = new ListalPageFactory(
             this.fetch,
             new ListalFileNamingStrategy(),
-            downloaderArguments.url,
         );
+
+        const firstListalPage = listalPageFactory.getListalPage(downloaderArguments.url);
 
         const imageQueue = new ImageQueue(
             imageStats,
@@ -70,9 +72,7 @@ export default class Main {
             pageNumber++
         ) {
             pageQueue.push(async () => {
-                const listalPage = new ListalPage(
-                    this.fetch,
-                    new ListalFileNamingStrategy(),
+                const listalPage = listalPageFactory.getListalPage(
                     downloaderArguments.url,
                     pageNumber,
                 );

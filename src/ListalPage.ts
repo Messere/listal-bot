@@ -2,22 +2,24 @@ import IFileNamingStrategy from "./IFileNamingStrategy";
 import IImageInfo from "./IImageInfo";
 
 export default class ListalPage {
+    protected pageNumber: number;
+    protected fetch: any;
+    protected namingStrategy: IFileNamingStrategy;
+    protected pageUrl: string;
+
+    protected readonly imageUrlRegexp = /\/viewimage\/(\d+)/g;
+    protected readonly fullImageUrlPattern = "http://ilarge.lisimg.com/image/{imageId}/10000full-{name}.jpg";
+
     private readonly pageUrlPattern = "http://www.listal.com/{type}/{name}/pictures/{pageNumber}";
     private readonly pagePersonUrlPattern = "http://www.listal.com/{name}/pictures//{pageNumber}";
-    private readonly fullImageUrlPattern = "http://ilarge.lisimg.com/image/{imageId}/10000full-{name}.jpg";
     private readonly listalPageRegexp = /https?:\/\/www\.listal\.com\/([a-z_-]+)\/([^\/]+)/i;
     private readonly listalPersonPageRegexp = /https?:\/\/www\.listal\.com\/([^\/]+)/i;
-    private readonly imageUrlRegexp = /https?:\/\/www\.listal\.com\/viewimage\/(\d+)/g;
 
     private pagerUrlRegexp;
 
     private name: string;
     private category: string;
-    private pageUrl: string;
     private pageContents: string;
-    private namingStrategy: IFileNamingStrategy;
-    private fetch: any;
-    private pageNumber: number;
 
     constructor(
         fetch: any,
@@ -101,7 +103,7 @@ export default class ListalPage {
         return Promise.resolve(totalPages);
     }
 
-    private async getPageContents(): Promise<string> {
+    protected async getPageContents(): Promise<string> {
         if (this.pageContents === undefined) {
             const resource = await this.fetch(this.pageUrl);
             if (!resource.ok) {
@@ -110,6 +112,10 @@ export default class ListalPage {
             this.pageContents = await resource.text();
         }
         return Promise.resolve(this.pageContents);
+    }
+
+    protected encodeName(name: string): string {
+        return /^[\u0000-\u007f]*$/.test(name) ? name : encodeURIComponent(name);
     }
 
     private getTypeAndNameFromUrl(url: string): string[] {
@@ -127,10 +133,6 @@ export default class ListalPage {
         } else {
             throw new Error(`Unrecognized listal url: "${url}"`);
         }
-    }
-
-    private encodeName(name: string): string {
-        return /^[\u0000-\u007f]*$/.test(name) ? name : encodeURIComponent(name);
     }
 
     private makePageUrl(type: string, name: string, pageNumber: number): string {

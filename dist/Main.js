@@ -38,7 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var ImageDownloader_1 = require("./ImageDownloader");
 var ImageQueue_1 = require("./ImageQueue");
 var ListalFileNamingStrategy_1 = require("./ListalFileNamingStrategy");
-var ListalPage_1 = require("./ListalPage");
+var ListalPageFactory_1 = require("./ListalPageFactory");
 var Main = /** @class */ (function () {
     function Main(logger, downloader, fetch, queue) {
         this.logger = logger;
@@ -48,7 +48,7 @@ var Main = /** @class */ (function () {
     }
     Main.prototype.run = function (downloaderArguments) {
         return __awaiter(this, void 0, void 0, function () {
-            var imageStats, firstListalPage, imageQueue, pageQueue, totalPages, _loop_1, pageNumber;
+            var imageStats, listalPageFactory, firstListalPage, imageQueue, pageQueue, totalPages, _loop_1, pageNumber;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -58,7 +58,8 @@ var Main = /** @class */ (function () {
                             success: 0,
                             total: 0,
                         };
-                        firstListalPage = new ListalPage_1.default(this.fetch, new ListalFileNamingStrategy_1.default(), downloaderArguments.url);
+                        listalPageFactory = new ListalPageFactory_1.default(this.fetch, new ListalFileNamingStrategy_1.default());
+                        firstListalPage = listalPageFactory.getListalPage(downloaderArguments.url);
                         imageQueue = new ImageQueue_1.default(imageStats, new ImageDownloader_1.default(this.logger, this.downloader, this.getDestinationDir(firstListalPage, downloaderArguments), downloaderArguments.overwriteExisting), this.logger, this.queue, downloaderArguments.concurrentImageDownloadsNumber, downloaderArguments.timeoutSeconds, downloaderArguments.retries);
                         this.logger.log("Downloading " + (downloaderArguments.overwriteExisting ? "all" : "new") +
                             (" images of " + firstListalPage.getCategory() + " \"" + firstListalPage.getName() + "\""));
@@ -76,7 +77,7 @@ var Main = /** @class */ (function () {
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {
                                         case 0:
-                                            listalPage = new ListalPage_1.default(this.fetch, new ListalFileNamingStrategy_1.default(), downloaderArguments.url, pageNumber);
+                                            listalPage = listalPageFactory.getListalPage(downloaderArguments.url, pageNumber);
                                             return [4 /*yield*/, listalPage.getImages()];
                                         case 1:
                                             images = _a.sent();

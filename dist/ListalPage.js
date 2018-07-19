@@ -39,12 +39,12 @@ var ListalPage = /** @class */ (function () {
     function ListalPage(fetch, namingStrategy, url, pageNumber) {
         var _a;
         if (pageNumber === void 0) { pageNumber = 1; }
+        this.imageUrlRegexp = /\/viewimage\/(\d+)/g;
+        this.fullImageUrlPattern = "http://ilarge.lisimg.com/image/{imageId}/10000full-{name}.jpg";
         this.pageUrlPattern = "http://www.listal.com/{type}/{name}/pictures/{pageNumber}";
         this.pagePersonUrlPattern = "http://www.listal.com/{name}/pictures//{pageNumber}";
-        this.fullImageUrlPattern = "http://ilarge.lisimg.com/image/{imageId}/10000full-{name}.jpg";
         this.listalPageRegexp = /https?:\/\/www\.listal\.com\/([a-z_-]+)\/([^\/]+)/i;
         this.listalPersonPageRegexp = /https?:\/\/www\.listal\.com\/([^\/]+)/i;
-        this.imageUrlRegexp = /https?:\/\/www\.listal\.com\/viewimage\/(\d+)/g;
         this.pageNumber = pageNumber;
         this.fetch = fetch;
         this.namingStrategy = namingStrategy;
@@ -145,6 +145,9 @@ var ListalPage = /** @class */ (function () {
             });
         });
     };
+    ListalPage.prototype.encodeName = function (name) {
+        return /^[\u0000-\u007f]*$/.test(name) ? name : encodeURIComponent(name);
+    };
     ListalPage.prototype.getTypeAndNameFromUrl = function (url) {
         var match = url.match(this.listalPageRegexp);
         if (match !== null && match[2] !== "picture") {
@@ -161,9 +164,6 @@ var ListalPage = /** @class */ (function () {
         else {
             throw new Error("Unrecognized listal url: \"" + url + "\"");
         }
-    };
-    ListalPage.prototype.encodeName = function (name) {
-        return /^[\u0000-\u007f]*$/.test(name) ? name : encodeURIComponent(name);
     };
     ListalPage.prototype.makePageUrl = function (type, name, pageNumber) {
         return (type === null ? this.pagePersonUrlPattern : this.pageUrlPattern)
