@@ -1,4 +1,5 @@
 import ArgumentParser from "./ArgumentParser";
+import IDownloaderArguments from "./IDownloaderArguments";
 
 describe("Command line arguments", () => {
     let argumentParser;
@@ -10,7 +11,7 @@ describe("Command line arguments", () => {
     it ("should parse short command line options", () => {
         const args = argumentParser.getArguments(
             ["-u", "abc", "-o", "xyz", "-h", "-x", "-t", "15", "-k", "-b",
-             "-c", "20", "-p", "30", "-r", "100", "-a", "-l", "10:100"],
+             "-c", "20", "-p", "30", "-r", "100", "-a", "-l", "10:100", "-v"],
         );
         expect(args).toEqual({
             appendCategory: true,
@@ -18,14 +19,15 @@ describe("Command line arguments", () => {
             concurrentImageDownloadsNumber: 20,
             concurrentPageDownloadsNumber: 30,
             destinationDir: "xyz",
-            help: true,
             maxPageNumber: 100,
             minPageNumber: 10,
             overwriteExisting: true,
             retries: 100,
+            showHelp: true,
+            showVersion: true,
             timeoutSeconds: 15,
             url: "abc",
-        });
+        } as IDownloaderArguments);
     });
 
     it ("should parse long command line options", () => {
@@ -33,7 +35,7 @@ describe("Command line arguments", () => {
             ["--url", "abc", "--output", "xyz", "--help", "--overwrite", "--append-category",
             "--timeout", "15", "--concurrency", "20", "--page-concurrency", "30",
             "--retries", "100", "--append-name", "--limit-to", "10:100",
-            "--append-category-name"],
+            "--append-category-name", "--version"],
         );
         expect(args).toEqual({
             appendCategory: true,
@@ -41,14 +43,15 @@ describe("Command line arguments", () => {
             concurrentImageDownloadsNumber: 20,
             concurrentPageDownloadsNumber: 30,
             destinationDir: "xyz",
-            help: true,
             maxPageNumber: 100,
             minPageNumber: 10,
             overwriteExisting: true,
             retries: 100,
+            showHelp: true,
+            showVersion: true,
             timeoutSeconds: 15,
             url: "abc",
-        });
+        } as IDownloaderArguments);
     });
 
     it ("should return only default values", () => {
@@ -59,14 +62,15 @@ describe("Command line arguments", () => {
             concurrentImageDownloadsNumber: 15,
             concurrentPageDownloadsNumber: 5,
             destinationDir: undefined,
-            help: false,
             maxPageNumber: null,
             minPageNumber: 1,
             overwriteExisting: false,
             retries: 5,
+            showHelp: false,
+            showVersion: false,
             timeoutSeconds: 10,
             url: undefined,
-        });
+        } as IDownloaderArguments);
     });
 
     it ("should say that arguments are invalid if url and directory is missing", () => {

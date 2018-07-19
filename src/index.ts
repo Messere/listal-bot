@@ -6,6 +6,7 @@ import * as queue from "queue";
 import ArgumentParser from "./ArgumentParser";
 import ConsoleLogger from "./ConsoleLogger";
 import Main from "./Main";
+import version from "./Version";
 
 const logger = new ConsoleLogger();
 const argParser = new ArgumentParser();
@@ -13,9 +14,13 @@ const argParser = new ArgumentParser();
 try {
     const args = argParser.getArguments(process.argv);
 
-    if (args.help) {
+    if (args.showHelp) {
 
         logger.log(argParser.getUsage());
+
+    } else if (args.showVersion) {
+
+        logger.log(version);
 
     } else if (!argParser.isValid(args)) {
 

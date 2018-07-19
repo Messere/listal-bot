@@ -8,18 +8,19 @@ describe("Command line arguments", function () {
     });
     it("should parse short command line options", function () {
         var args = argumentParser.getArguments(["-u", "abc", "-o", "xyz", "-h", "-x", "-t", "15", "-k", "-b",
-            "-c", "20", "-p", "30", "-r", "100", "-a", "-l", "10:100"]);
+            "-c", "20", "-p", "30", "-r", "100", "-a", "-l", "10:100", "-v"]);
         expect(args).toEqual({
             appendCategory: true,
             appendName: true,
             concurrentImageDownloadsNumber: 20,
             concurrentPageDownloadsNumber: 30,
             destinationDir: "xyz",
-            help: true,
             maxPageNumber: 100,
             minPageNumber: 10,
             overwriteExisting: true,
             retries: 100,
+            showHelp: true,
+            showVersion: true,
             timeoutSeconds: 15,
             url: "abc",
         });
@@ -28,18 +29,19 @@ describe("Command line arguments", function () {
         var args = argumentParser.getArguments(["--url", "abc", "--output", "xyz", "--help", "--overwrite", "--append-category",
             "--timeout", "15", "--concurrency", "20", "--page-concurrency", "30",
             "--retries", "100", "--append-name", "--limit-to", "10:100",
-            "--append-category-name"]);
+            "--append-category-name", "--version"]);
         expect(args).toEqual({
             appendCategory: true,
             appendName: true,
             concurrentImageDownloadsNumber: 20,
             concurrentPageDownloadsNumber: 30,
             destinationDir: "xyz",
-            help: true,
             maxPageNumber: 100,
             minPageNumber: 10,
             overwriteExisting: true,
             retries: 100,
+            showHelp: true,
+            showVersion: true,
             timeoutSeconds: 15,
             url: "abc",
         });
@@ -52,11 +54,12 @@ describe("Command line arguments", function () {
             concurrentImageDownloadsNumber: 15,
             concurrentPageDownloadsNumber: 5,
             destinationDir: undefined,
-            help: false,
             maxPageNumber: null,
             minPageNumber: 1,
             overwriteExisting: false,
             retries: 5,
+            showHelp: false,
+            showVersion: false,
             timeoutSeconds: 10,
             url: undefined,
         });

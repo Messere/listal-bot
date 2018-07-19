@@ -37,9 +37,9 @@ npm install listal-bot -g
 ## Usage
 
 ```bash
-$ listal-bot -h
+$ listal-bot --help
 
-listal-bot
+listal-bot 0.5.0
 
   Download all images from Listal page.
 
@@ -60,6 +60,7 @@ Options
                                     to the end (-l 7:) or from the start to a page (-l :12)
   -x, --overwrite                   overwrite existing files (by default only new files are downloaded)
   -h, --help                        show this help
+  -v, --version                     show program version
   -t, --timeout <seconds>           image download timeout in seconds (default: 10)
   -c, --concurrency <number>        number of concurrent image downloads (default: 15)
   -p, --page-concurrency <number>   number of concurrent page downloads (default: 5)

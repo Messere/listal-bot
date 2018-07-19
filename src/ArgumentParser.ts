@@ -3,6 +3,7 @@ import { CommandLineOptions } from "command-line-args";
 import * as commandLineUsage from "command-line-usage";
 import { OptionDefinition } from "command-line-usage";
 import IDownloaderArguments from "./IDownloaderArguments";
+import version from "./Version";
 
 export default class ArgumentParser {
 
@@ -59,6 +60,13 @@ export default class ArgumentParser {
             defaultValue: false,
             description: "show this help",
             name: "help",
+            type: Boolean,
+        },
+        {
+            alias: "v",
+            defaultValue: false,
+            description: "show program version",
+            name: "version",
             type: Boolean,
         },
         {
@@ -129,9 +137,10 @@ export default class ArgumentParser {
             concurrentImageDownloadsNumber: options.concurrency,
             concurrentPageDownloadsNumber: options["page-concurrency"],
             destinationDir: options.output,
-            help: options.help,
             overwriteExisting: options.overwrite,
             retries: options.retries,
+            showHelp: options.help,
+            showVersion: options.version,
             timeoutSeconds: options.timeout,
             url: options.url,
         } as IDownloaderArguments;
@@ -146,7 +155,7 @@ export default class ArgumentParser {
         const sections = [
             {
                 content: "Download all images from listal page.",
-                header: "listal-bot",
+                header: `listal-bot ${version}`,
             },
             {
                 content: "Usage listal-bot -u <url> -o <dir> [options]\n\nOptions -u and -o are required.",

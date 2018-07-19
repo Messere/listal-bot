@@ -7,12 +7,16 @@ var queue = require("queue");
 var ArgumentParser_1 = require("./ArgumentParser");
 var ConsoleLogger_1 = require("./ConsoleLogger");
 var Main_1 = require("./Main");
+var Version_1 = require("./Version");
 var logger = new ConsoleLogger_1.default();
 var argParser = new ArgumentParser_1.default();
 try {
     var args = argParser.getArguments(process.argv);
-    if (args.help) {
+    if (args.showHelp) {
         logger.log(argParser.getUsage());
+    }
+    else if (args.showVersion) {
+        logger.log(Version_1.default);
     }
     else if (!argParser.isValid(args)) {
         logger.error("Fatal error: Missing url or destination dir.");

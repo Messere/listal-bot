@@ -3,7 +3,8 @@ export default interface IDownloaderArguments {
     destinationDir: string;
     appendName: boolean;
     appendCategory: boolean;
-    help: boolean;
+    showHelp: boolean;
+    showVersion: boolean;
     overwriteExisting: boolean;
     retries: number;
     concurrentImageDownloadsNumber: number;

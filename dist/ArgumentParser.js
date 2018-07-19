@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var commandLineArgs = require("command-line-args");
 var commandLineUsage = require("command-line-usage");
+var Version_1 = require("./Version");
 var ArgumentParser = /** @class */ (function () {
     function ArgumentParser() {
         this.optionDefinitions = [
@@ -57,6 +58,13 @@ var ArgumentParser = /** @class */ (function () {
                 defaultValue: false,
                 description: "show this help",
                 name: "help",
+                type: Boolean,
+            },
+            {
+                alias: "v",
+                defaultValue: false,
+                description: "show program version",
+                name: "version",
                 type: Boolean,
             },
             {
@@ -123,9 +131,10 @@ var ArgumentParser = /** @class */ (function () {
             concurrentImageDownloadsNumber: options.concurrency,
             concurrentPageDownloadsNumber: options["page-concurrency"],
             destinationDir: options.output,
-            help: options.help,
             overwriteExisting: options.overwrite,
             retries: options.retries,
+            showHelp: options.help,
+            showVersion: options.version,
             timeoutSeconds: options.timeout,
             url: options.url,
         };
@@ -136,7 +145,7 @@ var ArgumentParser = /** @class */ (function () {
         var sections = [
             {
                 content: "Download all images from listal page.",
-                header: "listal-bot",
+                header: "listal-bot " + Version_1.default,
             },
             {
                 content: "Usage listal-bot -u <url> -o <dir> [options]\n\nOptions -u and -o are required.",
