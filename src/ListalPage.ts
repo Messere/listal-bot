@@ -120,7 +120,7 @@ export default class ListalPage {
 
     private getTypeAndNameFromUrl(url: string): string[] {
         const match = url.match(this.listalPageRegexp);
-        if (match !== null && match[2] !== "picture") {
+        if (match !== null && match[2] !== "pictures") {
             return [match[1], match[2]];
         }
 

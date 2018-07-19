@@ -150,7 +150,7 @@ var ListalPage = /** @class */ (function () {
     };
     ListalPage.prototype.getTypeAndNameFromUrl = function (url) {
         var match = url.match(this.listalPageRegexp);
-        if (match !== null && match[2] !== "picture") {
+        if (match !== null && match[2] !== "pictures") {
             return [match[1], match[2]];
         }
         var matchPerson = url.match(this.listalPersonPageRegexp);

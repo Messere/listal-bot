@@ -39,11 +39,35 @@ describe("Listal page", () => {
         expect(page.getUrl()).toEqual("http://www.listal.com/some-name/pictures//5");
     });
 
+    it("should properly get page name, category and url from person url that ends with /pictures", () => {
+        const page = new ListalPage(
+            fetchOther,
+            namingStrategy,
+            "http://www.listal.com/some-name/pictures",
+            5,
+        );
+        expect(page.getName()).toEqual("some-name");
+        expect(page.getCategory()).toEqual("person");
+        expect(page.getUrl()).toEqual("http://www.listal.com/some-name/pictures//5");
+    });
+
     it("should properly get page name, category and url from other category url", () => {
         const page = new ListalPage(
             fetchOther,
             namingStrategy,
             "http://www.listal.com/some-category/some-name",
+            5,
+        );
+        expect(page.getName()).toEqual("some-name");
+        expect(page.getCategory()).toEqual("some-category");
+        expect(page.getUrl()).toEqual("http://www.listal.com/some-category/some-name/pictures/5");
+    });
+
+    it("should properly get page name, category and url from other category url that ends with /pictures", () => {
+        const page = new ListalPage(
+            fetchOther,
+            namingStrategy,
+            "http://www.listal.com/some-category/some-name/pictures",
             5,
         );
         expect(page.getName()).toEqual("some-name");
