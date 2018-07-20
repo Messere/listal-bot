@@ -1,5 +1,7 @@
 # Listal-bot
 
+[![npm](https://img.shields.io/npm/v/listal-bot.svg)](https://npmjs.com/package/listal-bot)
+
 `Listal-bot` is a simple command line tool that allows downloading all images
 from given [Listal](http://www.listal.com) page.
 
