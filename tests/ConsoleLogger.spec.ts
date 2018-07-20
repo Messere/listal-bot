@@ -1,6 +1,6 @@
 import * as stdMocks from "std-mocks";
-import ConsoleLogger from "./ConsoleLogger";
-import IImageStats from "./IImageStats";
+import ConsoleLogger from "../src/ConsoleLogger";
+import IImageStats from "../src/IImageStats";
 
 describe("Console logger", () => {
 

@@ -1,6 +1,6 @@
-import IImageInfo from "./IImageInfo";
-import IImageStats from "./IImageStats";
-import ImageQueue from "./ImageQueue";
+import IImageInfo from "../src/IImageInfo";
+import IImageStats from "../src/IImageStats";
+import ImageQueue from "../src/ImageQueue";
 
 describe("Image queue", () => {
     let imageStats;

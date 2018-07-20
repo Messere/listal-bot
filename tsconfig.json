@@ -3,12 +3,19 @@
         "target": "es5",
         "module": "commonjs",
         "preserveConstEnums": true,
-        "rootDir": "./src/",
+        "forceConsistentCasingInFileNames": true,
         "moduleResolution": "node",
+        "newLine": "lf",
+        "noUnusedLocals": true,
         "lib": ["es2015"],
-        "outDir": "dist"
+        "outDir": "dist",
+        "pretty": true
     },
     "include": [
-        "src/*.ts"
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
     ]
 }

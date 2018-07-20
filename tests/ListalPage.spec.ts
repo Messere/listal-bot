@@ -1,6 +1,6 @@
 import * as readFile from "read-file";
-import ListalFileNamingStrategy from "./ListalFileNamingStrategy";
-import ListalPage from "./ListalPage";
+import ListalFileNamingStrategy from "../src/ListalFileNamingStrategy";
+import ListalPage from "../src/ListalPage";
 
 describe("Listal page", () => {
     let namingStrategy;

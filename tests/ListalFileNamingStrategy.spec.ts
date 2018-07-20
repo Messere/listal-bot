@@ -1,4 +1,4 @@
-import ListalFileNamingStrategy from "./ListalFileNamingStrategy";
+import ListalFileNamingStrategy from "../src/ListalFileNamingStrategy";
 
 describe("ListalFileNamingStrategy", () => {
     let namingStrategy;

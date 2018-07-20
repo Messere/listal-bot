@@ -1,6 +1,6 @@
-import ListalListPage from "./ListalListPage";
-import ListalPage from "./ListalPage";
-import ListalPageFactory from "./ListalPageFactory";
+import ListalListPage from "../src/ListalListPage";
+import ListalPage from "../src/ListalPage";
+import ListalPageFactory from "../src/ListalPageFactory";
 
 describe("Listal page factory", () => {
     let factory: ListalPageFactory;

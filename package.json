@@ -45,7 +45,7 @@
     },
     "scripts": {
         "lint": "tslint --project ./",
-        "compile": "rm dist/* && tsc && node update-version.js",
+        "compile": "rm -fr dist/* && tsc && node update-version.js",
         "test": "jasmine-ts --config=./jasmine.json"
     }
 }

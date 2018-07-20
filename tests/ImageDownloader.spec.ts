@@ -1,7 +1,7 @@
-import { existsSync,  lstatSync } from "fs";
+import { existsSync } from "fs";
 import * as mockFs from "mock-fs";
-import IImageInfo from "./IImageInfo";
-import ImageDownloader from "./ImageDownloader";
+import IImageInfo from "../src/IImageInfo";
+import ImageDownloader from "../src/ImageDownloader";
 
 describe("Image downloader", () => {
     let logger;
@@ -25,13 +25,15 @@ describe("Image downloader", () => {
     it("should create destination directory if it does not exist", () => {
         const dir = "output2/subdir1/subdir2";
         expect(existsSync(dir)).toBeFalsy();
-        const imageDownloader = new ImageDownloader(logger, downloader, dir);
+        // tslint:disable-next-line:no-unused-expression
+        new ImageDownloader(logger, downloader, dir);
         expect(existsSync(dir)).toBeTruthy();
     });
 
     it("should throw error if destination path is not a directory", () => {
         expect(() => {
-            const imageDownloader = new ImageDownloader(logger, downloader, "outputFile");
+            // tslint:disable-next-line:no-unused-expression
+            new ImageDownloader(logger, downloader, "outputFile");
         }).toThrowError("Path outputFile exists, but is not a directory");
 
     });

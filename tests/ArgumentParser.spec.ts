@@ -1,6 +1,6 @@
-import ArgumentParser from "./ArgumentParser";
-import defaults from "./DownloaderArgumentsDefaults";
-import IDownloaderArguments from "./IDownloaderArguments";
+import ArgumentParser from "../src/ArgumentParser";
+import defaults from "../src/DownloaderArgumentsDefaults";
+import IDownloaderArguments from "../src/IDownloaderArguments";
 
 describe("Command line arguments", () => {
     let argumentParser;
