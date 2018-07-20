@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var commandLineArgs = require("command-line-args");
 var commandLineUsage = require("command-line-usage");
+var DownloaderArgumentsDefaults_1 = require("./DownloaderArgumentsDefaults");
 var Version_1 = require("./Version");
 var ArgumentParser = /** @class */ (function () {
     function ArgumentParser() {
@@ -20,94 +21,94 @@ var ArgumentParser = /** @class */ (function () {
             },
             {
                 alias: "a",
-                defaultValue: false,
+                defaultValue: DownloaderArgumentsDefaults_1.default.appendName,
                 description: "append name extracted from URL to output directory",
                 name: "append-name",
                 type: Boolean,
             },
             {
                 alias: "k",
-                defaultValue: false,
+                defaultValue: DownloaderArgumentsDefaults_1.default.appendCategory,
                 description: "append category extracted from URL to output directory",
                 name: "append-category",
                 type: Boolean,
             },
             {
                 alias: "b",
-                defaultValue: false,
+                defaultValue: DownloaderArgumentsDefaults_1.default.appendCategory && DownloaderArgumentsDefaults_1.default.appendName,
                 description: "append category and name extracted from URL to output directory",
                 name: "append-category-name",
                 type: Boolean,
             },
             {
                 alias: "l",
-                defaultValue: "1:",
+                defaultValue: DownloaderArgumentsDefaults_1.default.minPageNumber + ":" + (DownloaderArgumentsDefaults_1.default.maxPageNumber ? DownloaderArgumentsDefaults_1.default.maxPageNumber : ""),
                 description: "download only from a single page (-l 5), a range of pages (-l 3:6), from page to" +
                     " the end (-l 7:) or from the start to a page (-l :12)",
                 name: "limit-to",
             },
             {
                 alias: "x",
-                defaultValue: false,
+                defaultValue: DownloaderArgumentsDefaults_1.default.overwriteExisting,
                 description: "overwrite existing files (by default only new files are downloaded)",
                 name: "overwrite",
                 type: Boolean,
             },
             {
                 alias: "h",
-                defaultValue: false,
+                defaultValue: DownloaderArgumentsDefaults_1.default.showHelp,
                 description: "show this help",
                 name: "help",
                 type: Boolean,
             },
             {
                 alias: "v",
-                defaultValue: false,
+                defaultValue: DownloaderArgumentsDefaults_1.default.showVersion,
                 description: "show program version",
                 name: "version",
                 type: Boolean,
             },
             {
                 alias: "t",
-                defaultValue: 10,
-                description: "image download timeout in seconds (default: 10)",
+                defaultValue: DownloaderArgumentsDefaults_1.default.timeoutSeconds,
+                description: "image download timeout in seconds (default: " + DownloaderArgumentsDefaults_1.default.timeoutSeconds + ")",
                 name: "timeout",
                 type: function (value) {
                     var parsedValue = parseInt(value, 10);
-                    return isNaN(parsedValue) ? 10 : parsedValue;
+                    return isNaN(parsedValue) ? DownloaderArgumentsDefaults_1.default.timeoutSeconds : parsedValue;
                 },
                 typeLabel: "<seconds>",
             },
             {
                 alias: "c",
-                defaultValue: 15,
-                description: "number of concurrent image downloads (default: 15)",
+                defaultValue: DownloaderArgumentsDefaults_1.default.concurrentImageDownloadsNumber,
+                description: "number of concurrent image downloads (default: " + DownloaderArgumentsDefaults_1.default.concurrentImageDownloadsNumber + ")",
                 name: "concurrency",
                 type: function (value) {
                     var parsedValue = parseInt(value, 10);
-                    return isNaN(parsedValue) ? 15 : parsedValue;
+                    return isNaN(parsedValue) ? DownloaderArgumentsDefaults_1.default.concurrentImageDownloadsNumber : parsedValue;
                 },
                 typeLabel: "<number>",
             },
             {
                 alias: "p",
-                defaultValue: 5,
-                description: "number of concurrent page downloads (default: 5)",
+                defaultValue: DownloaderArgumentsDefaults_1.default.concurrentPageDownloadsNumber,
+                description: "number of concurrent page downloads (default: " + DownloaderArgumentsDefaults_1.default.concurrentPageDownloadsNumber + ")",
                 name: "page-concurrency",
                 type: function (value) {
                     var parsedValue = parseInt(value, 10);
-                    return isNaN(parsedValue) ? 5 : parsedValue;
+                    return isNaN(parsedValue) ? DownloaderArgumentsDefaults_1.default.concurrentPageDownloadsNumber : parsedValue;
                 },
                 typeLabel: "<number>",
             },
             {
                 alias: "r",
-                defaultValue: 5,
-                description: "maximum number of retries after image download error (default: 5)",
+                defaultValue: DownloaderArgumentsDefaults_1.default.retries,
+                description: "maximum number of retries after image download error (default: " + DownloaderArgumentsDefaults_1.default.retries + ")",
                 name: "retries",
                 type: function (value) {
                     var parsedValue = parseInt(value, 10);
-                    return isNaN(parsedValue) ? 5 : parsedValue;
+                    return isNaN(parsedValue) ? DownloaderArgumentsDefaults_1.default.retries : parsedValue;
                 },
                 typeLabel: "<number>",
             },

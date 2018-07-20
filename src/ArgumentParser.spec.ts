@@ -1,4 +1,5 @@
 import ArgumentParser from "./ArgumentParser";
+import defaults from "./DownloaderArgumentsDefaults";
 import IDownloaderArguments from "./IDownloaderArguments";
 
 describe("Command line arguments", () => {
@@ -56,21 +57,7 @@ describe("Command line arguments", () => {
 
     it ("should return only default values", () => {
         const args = argumentParser.getArguments([]);
-        expect(args).toEqual({
-            appendCategory: false,
-            appendName: false,
-            concurrentImageDownloadsNumber: 15,
-            concurrentPageDownloadsNumber: 5,
-            destinationDir: undefined,
-            maxPageNumber: null,
-            minPageNumber: 1,
-            overwriteExisting: false,
-            retries: 5,
-            showHelp: false,
-            showVersion: false,
-            timeoutSeconds: 10,
-            url: undefined,
-        } as IDownloaderArguments);
+        expect(args).toEqual(defaults);
     });
 
     it ("should say that arguments are invalid if url and directory is missing", () => {

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var ArgumentParser_1 = require("./ArgumentParser");
+var DownloaderArgumentsDefaults_1 = require("./DownloaderArgumentsDefaults");
 describe("Command line arguments", function () {
     var argumentParser;
     beforeEach(function () {
@@ -48,21 +49,7 @@ describe("Command line arguments", function () {
     });
     it("should return only default values", function () {
         var args = argumentParser.getArguments([]);
-        expect(args).toEqual({
-            appendCategory: false,
-            appendName: false,
-            concurrentImageDownloadsNumber: 15,
-            concurrentPageDownloadsNumber: 5,
-            destinationDir: undefined,
-            maxPageNumber: null,
-            minPageNumber: 1,
-            overwriteExisting: false,
-            retries: 5,
-            showHelp: false,
-            showVersion: false,
-            timeoutSeconds: 10,
-            url: undefined,
-        });
+        expect(args).toEqual(DownloaderArgumentsDefaults_1.default);
     });
     it("should say that arguments are invalid if url and directory is missing", function () {
         var args = argumentParser.getArguments([]);

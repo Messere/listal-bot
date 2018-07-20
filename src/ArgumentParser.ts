@@ -1,7 +1,8 @@
-import * as commandLineArgs from "command-line-args";
 import { CommandLineOptions } from "command-line-args";
+import * as commandLineArgs from "command-line-args";
 import * as commandLineUsage from "command-line-usage";
 import { OptionDefinition } from "command-line-usage";
+import defaults from "./DownloaderArgumentsDefaults";
 import IDownloaderArguments from "./IDownloaderArguments";
 import version from "./Version";
 
@@ -22,94 +23,94 @@ export default class ArgumentParser {
         },
         {
             alias: "a",
-            defaultValue: false,
+            defaultValue: defaults.appendName,
             description: "append name extracted from URL to output directory",
             name: "append-name",
             type: Boolean,
         },
         {
             alias: "k",
-            defaultValue: false,
+            defaultValue: defaults.appendCategory,
             description: "append category extracted from URL to output directory",
             name: "append-category",
             type: Boolean,
         },
         {
             alias: "b",
-            defaultValue: false,
+            defaultValue: defaults.appendCategory && defaults.appendName,
             description: "append category and name extracted from URL to output directory",
             name: "append-category-name",
             type: Boolean,
         },
         {
             alias: "l",
-            defaultValue: "1:",
+            defaultValue: `${defaults.minPageNumber}:${defaults.maxPageNumber ? defaults.maxPageNumber : ""}`,
             description: "download only from a single page (-l 5), a range of pages (-l 3:6), from page to" +
                 " the end (-l 7:) or from the start to a page (-l :12)",
             name: "limit-to",
         },
         {
             alias: "x",
-            defaultValue: false,
+            defaultValue: defaults.overwriteExisting,
             description: "overwrite existing files (by default only new files are downloaded)",
             name: "overwrite",
             type: Boolean,
         },
         {
             alias: "h",
-            defaultValue: false,
+            defaultValue: defaults.showHelp,
             description: "show this help",
             name: "help",
             type: Boolean,
         },
         {
             alias: "v",
-            defaultValue: false,
+            defaultValue: defaults.showVersion,
             description: "show program version",
             name: "version",
             type: Boolean,
         },
         {
             alias: "t",
-            defaultValue: 10,
-            description: "image download timeout in seconds (default: 10)",
+            defaultValue: defaults.timeoutSeconds,
+            description: `image download timeout in seconds (default: ${defaults.timeoutSeconds})`,
             name: "timeout",
             type: (value) => {
                 const parsedValue = parseInt(value, 10);
-                return isNaN(parsedValue) ? 10 : parsedValue;
+                return isNaN(parsedValue) ? defaults.timeoutSeconds : parsedValue;
             },
             typeLabel: "<seconds>",
         },
         {
             alias: "c",
-            defaultValue: 15,
-            description: "number of concurrent image downloads (default: 15)",
+            defaultValue: defaults.concurrentImageDownloadsNumber,
+            description: `number of concurrent image downloads (default: ${defaults.concurrentImageDownloadsNumber})`,
             name: "concurrency",
             type: (value) => {
                 const parsedValue = parseInt(value, 10);
-                return isNaN(parsedValue) ? 15 : parsedValue;
+                return isNaN(parsedValue) ? defaults.concurrentImageDownloadsNumber : parsedValue;
             },
             typeLabel: "<number>",
         },
         {
             alias: "p",
-            defaultValue: 5,
-            description: "number of concurrent page downloads (default: 5)",
+            defaultValue: defaults.concurrentPageDownloadsNumber,
+            description: `number of concurrent page downloads (default: ${defaults.concurrentPageDownloadsNumber})`,
             name: "page-concurrency",
             type: (value) => {
                 const parsedValue = parseInt(value, 10);
-                return isNaN(parsedValue) ? 5 : parsedValue;
+                return isNaN(parsedValue) ? defaults.concurrentPageDownloadsNumber : parsedValue;
             },
             typeLabel: "<number>",
         },
         {
             alias: "r",
-            defaultValue: 5,
-            description: "maximum number of retries after image download error (default: 5)",
+            defaultValue: defaults.retries,
+            description: `maximum number of retries after image download error (default: ${defaults.retries})`,
             name: "retries",
             type: (value) => {
                 const parsedValue = parseInt(value, 10);
-                return isNaN(parsedValue) ? 5 : parsedValue;
+                return isNaN(parsedValue) ? defaults.retries : parsedValue;
             },
             typeLabel: "<number>",
         },
