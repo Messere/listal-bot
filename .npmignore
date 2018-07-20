@@ -6,3 +6,4 @@ tslint.json
 /dist/*.spec.js
 .gitignore
 /test-fixtures/
+update-version.js
