@@ -17,7 +17,7 @@ export default class ConsoleLogger implements ILogger {
         const barSize = Math.round((this.progressBarWidth * percent) / 100);
 
         const info = `Done ${imageStats.success + imageStats.error} ` +
-            `of ${imageStats.total} (errors: ${imageStats.error})`;
+            `of ${imageStats.total} (saved: ${imageStats.saved}, errors: ${imageStats.error})`;
 
         const padding = "   ";
         const paddedPercent = padding.substring(0, padding.length - percent.toString().length) + percent.toString();

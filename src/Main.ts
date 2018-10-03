@@ -26,6 +26,7 @@ export default class Main {
 
         const imageStats: IImageStats = {
             error: 0,
+            saved: 0,
             success: 0,
             total: 0,
         };

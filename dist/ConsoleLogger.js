@@ -14,7 +14,7 @@ var ConsoleLogger = /** @class */ (function () {
         var percent = Math.round(((imageStats.success + imageStats.error) * 100) / imageStats.total);
         var barSize = Math.round((this.progressBarWidth * percent) / 100);
         var info = "Done " + (imageStats.success + imageStats.error) + " " +
-            ("of " + imageStats.total + " (errors: " + imageStats.error + ")");
+            ("of " + imageStats.total + " (saved: " + imageStats.saved + ", errors: " + imageStats.error + ")");
         var padding = "   ";
         var paddedPercent = padding.substring(0, padding.length - percent.toString().length) + percent.toString();
         var progressBar = paddedPercent + "% [" + "=".repeat(barSize) + ">" + " ".repeat(this.progressBarWidth - barSize) + "] " + info + "\r";

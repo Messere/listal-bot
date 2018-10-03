@@ -34,13 +34,16 @@ describe("Console logger", () => {
     it("should show progress bar to stdout", () => {
         logger.progress({
             error: 4,
+            saved: 2,
             success: 6,
             total: 100,
         } as IImageStats);
 
         const output = stdMocks.flush();
         expect(output.stderr).toEqual([]);
-        expect(output.stdout).toEqual([" 10% [===>                           ] Done 10 of 100 (errors: 4)\r"]);
+        expect(output.stdout).toEqual(
+            [" 10% [===>                           ] Done 10 of 100 (saved: 2, errors: 4)\r"],
+        );
     });
 
 });

@@ -66,6 +66,9 @@ var ImageQueue = /** @class */ (function () {
                         return [4 /*yield*/, this.imageDownloader.download(imageUrl, this.timeoutSeconds)];
                     case 1:
                         result = _a.sent();
+                        if (result) {
+                            this.imageStats.saved++;
+                        }
                         this.imageStats.success++;
                         return [3 /*break*/, 3];
                     case 2:

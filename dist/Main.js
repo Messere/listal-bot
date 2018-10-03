@@ -55,6 +55,7 @@ var Main = /** @class */ (function () {
                     case 0:
                         imageStats = {
                             error: 0,
+                            saved: 0,
                             success: 0,
                             total: 0,
                         };

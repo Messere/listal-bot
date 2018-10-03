@@ -41,6 +41,9 @@ export default class ImageQueue {
             let result;
             try {
                 result = await this.imageDownloader.download(imageUrl, this.timeoutSeconds);
+                if (result) {
+                    this.imageStats.saved++;
+                }
                 this.imageStats.success++;
             } catch (e) {
                 this.logger.error(e);
