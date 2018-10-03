@@ -74,7 +74,7 @@ Example:
 ```bash
 $ listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures
 Downloading new images of person "marilyn-monroe"
- 15% [=====>                         ] Done 1113 of 7418 (errors: 0)
+ 15% [=====>                         ] Done 1113 of 7418 (saved: 523, errors: 0)
 ```
 
 ### Re-downloading already downloaded images
@@ -87,7 +87,7 @@ Example:
 ```bash
 $ listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures -x
 Downloading all images of person "marilyn-monroe"
- 15% [=====>                         ] Done 1113 of 7418 (errors: 0)
+ 15% [=====>                         ] Done 1113 of 7418 (saved: 1113, errors: 0)
 ```
 
 ### Automatically creating subdirectories
@@ -100,21 +100,21 @@ from Listal URL. Use one of `-a`, `-k` or `-b` options to do that:
 $ listal-bot -u http://www.listal.com/marilyn-monroe -o ./my-picture-collection -a
 Created destination directory ./my-picture-collection/marilyn-monroe
 Downloading new images of person "marilyn-monroe"
- 15% [=====>                         ] Done 1113 of 7418 (errors: 0)
+ 15% [=====>                         ] Done 1113 of 7418 (saved: 1113, errors: 0)
 ```
 
 ```bash
 $ listal-bot -u http://www.listal.com/marilyn-monroe -o ./my-picture-collection -k
 Created destination directory ./my-picture-collection/person
 Downloading new images of person "marilyn-monroe"
- 15% [=====>                         ] Done 1113 of 7418 (errors: 0)
+ 15% [=====>                         ] Done 1113 of 7418 (saved: 1113, errors: 0)
 ```
 
 ```bash
 $ listal-bot -u http://www.listal.com/marilyn-monroe -o ./my-picture-collection -b
 Created destination directory ./my-picture-collection/person/marilyn-monroe
 Downloading new images of person "marilyn-monroe"
- 15% [=====>                         ] Done 1113 of 7418 (errors: 0)
+ 15% [=====>                         ] Done 1113 of 7418 (saved: 1113, errors: 0)
 ```
 
 ### Downloading only specified pages
@@ -131,7 +131,7 @@ To download only most recent images (from first 5 pages):
 $ listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures -l :5
 Created destination directory ./mm-pictures
 Downloading new images of person "marilyn-monroe"
- 20% [======>                        ] Done 20 of 100 (errors: 0)
+ 20% [======>                        ] Done 20 of 100 (saved: 20, errors: 0)
 ```
 
 To download only the oldest images:
@@ -140,7 +140,7 @@ To download only the oldest images:
 $ listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures -l 370:
 Created destination directory ./mm-pictures
 Downloading new images of person "marilyn-monroe"
- 59% [==================>            ] Done 22 of 37 (errors: 0)
+ 59% [==================>            ] Done 22 of 37 (saved: 22, errors: 0)
 ```
 
 To download images only from one specific page:
@@ -149,7 +149,7 @@ To download images only from one specific page:
 $ listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures -l 17
 Created destination directory ./mm-pictures
 Downloading new images of person "marilyn-monroe"
- 75% [=======================>       ] Done 15 of 20 (errors: 0)
+ 75% [=======================>       ] Done 15 of 20 (saved: 15, errors: 0)
 ```
 
 Or from a specific range of pages:
@@ -158,7 +158,7 @@ Or from a specific range of pages:
 $ listal-bot -u http://www.listal.com/marilyn-monroe -o ./mm-pictures -l 17:21
 Created destination directory ./mm-pictures
 Downloading new images of person "marilyn-monroe"
- 29% [=========>                     ] Done 29 of 100 (errors: 0)
+ 29% [=========>                     ] Done 29 of 100 (saved: 29, errors: 0)
 ```
 
 Note that only one page range can be specified. You can download more images by running
