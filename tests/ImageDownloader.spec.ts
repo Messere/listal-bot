@@ -46,6 +46,7 @@ describe("Image downloader", () => {
             url: "http://get.me",
         } as IImageInfo, 10);
         expect(downloader.image).toHaveBeenCalledWith({
+            ca: jasmine.any(Array),
             dest: "output1/image.jpeg",
             timeout: 10000,
             url: "http://get.me",
@@ -55,6 +56,7 @@ describe("Image downloader", () => {
     it("should not overwrite existing image", () => {
         const imageDownloader = new ImageDownloader(logger, downloader, "output1");
         imageDownloader.download({
+            ca: jasmine.any(Array),
             fileName: "file.jpeg",
             retries: 0,
             url: "http://get.me",
@@ -70,6 +72,7 @@ describe("Image downloader", () => {
             url: "http://get.me",
         } as IImageInfo, 10);
         expect(downloader.image).toHaveBeenCalledWith({
+            ca: jasmine.any(Array),
             dest: "output1/file.jpeg",
             timeout: 10000,
             url: "http://get.me",
