@@ -5,7 +5,6 @@ import ImageQueue from "../src/ImageQueue";
 describe("Image queue", () => {
     let imageStats;
     let imageDownloader;
-    let imageDownloaderFailure;
     let logger;
     let queueContents;
     let queue;
@@ -20,6 +19,12 @@ describe("Image queue", () => {
         2,
     );
 
+    const imageDownloaderFailure = (reason: string) => {
+        return {
+            download: async (url: string, timeout: number) => Promise.reject(new Error(reason)),
+        };
+    };
+
     beforeEach(() => {
         imageStats = {
             error: 0,
@@ -29,10 +34,6 @@ describe("Image queue", () => {
 
         imageDownloader = {
             download: async (url: string, timeout: number) => Promise.resolve(),
-        };
-
-        imageDownloaderFailure = {
-            download: async (url: string, timeout: number) => Promise.reject(),
         };
 
         logger = jasmine.createSpyObj("ILogger", ["log", "error", "progress"]);
@@ -75,7 +76,7 @@ describe("Image queue", () => {
     });
 
     it("should re-queue job after failure", async () => {
-        const imageQueue = createImageQueue(imageDownloaderFailure);
+        const imageQueue = createImageQueue(imageDownloaderFailure("Image loading error - 500."));
         imageQueue.push({
             fileName: "test.jpg",
             retries: 0,
@@ -98,8 +99,32 @@ describe("Image queue", () => {
         expect(logger.progress).toHaveBeenCalledWith(expectedStats);
     });
 
+    it("should not re-queue job if reson for error was file not found", async () => {
+        const imageQueue = createImageQueue(imageDownloaderFailure("Image loading error - 404."));
+        imageQueue.push({
+            fileName: "test.jpg",
+            retries: 0,
+            url: "http://come.and.get.me/",
+        } as IImageInfo);
+
+        await queueContents[0]();
+
+        const expectedStats = {
+            error: 1,
+            success: 0,
+            total: 10,
+        };
+
+        expect(queueContents.length).toEqual(1);
+
+        expect(imageStats).toEqual(expectedStats);
+        expect(logger.error).toHaveBeenCalledTimes(2);
+        expect(logger.error).toHaveBeenCalledWith("Giving up as image http://come.and.get.me/ does not exist");
+        expect(logger.progress).toHaveBeenCalledWith(expectedStats);
+    });
+
     it("should update stats after exceeding limit of failures", async () => {
-        const imageQueue = createImageQueue(imageDownloaderFailure);
+        const imageQueue = createImageQueue(imageDownloaderFailure("Image loading error - 500."));
         imageQueue.push({
             fileName: "test.jpg",
             retries: 1,
@@ -121,7 +146,7 @@ describe("Image queue", () => {
     });
 
     it("should return queue length", () => {
-        const imageQueue = createImageQueue(imageDownloaderFailure);
+        const imageQueue = createImageQueue(imageDownloaderFailure("Image loading error - 500."));
 
         expect(imageQueue.length).toEqual(0);
 

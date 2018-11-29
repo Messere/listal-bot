@@ -76,7 +76,11 @@ var ImageQueue = /** @class */ (function () {
                         this.logger.error(e_1);
                         result = Promise.resolve();
                         imageUrl.retries += 1;
-                        if (imageUrl.retries < this.maxRetries) {
+                        if (e_1.message.indexOf("Image loading error - 404.") !== -1) {
+                            this.logger.error("Giving up as image " + imageUrl.url + " does not exist.");
+                            this.imageStats.error++;
+                        }
+                        else if (imageUrl.retries < this.maxRetries) {
                             this.logger.log("Will retry to download " + imageUrl.url + " later");
                             this.push(imageUrl);
                         }
