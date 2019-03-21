@@ -12,11 +12,12 @@ export default class ListalListPage extends ListalPage {
 
     constructor(
         fetch: any,
+        page: any,
         namingStrategy: IFileNamingStrategy,
         url: string,
         pageNumber: number = 1,
     ) {
-        super(fetch, namingStrategy, url, pageNumber);
+        super(fetch, page, namingStrategy, url, pageNumber);
 
         this.pageUrl = this.listPageUrlPattern.replace(
             "{name}",

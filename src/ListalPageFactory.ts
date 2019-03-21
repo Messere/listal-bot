@@ -5,12 +5,15 @@ import ListalPage from "./ListalPage";
 export default class ListalPageFactory {
     private fetch;
     private namingStrategy;
+    private page;
 
     constructor(
         fetch: any,
+        page: any,
         namingStrategy: IFileNamingStrategy,
     ) {
         this.fetch = fetch;
+        this.page = page
         this.namingStrategy = namingStrategy;
     }
 
@@ -20,9 +23,9 @@ export default class ListalPageFactory {
     ): ListalPage {
 
         if (this.isListPage(url)) {
-            return new ListalListPage(this.fetch, this.namingStrategy, url, pageNumber);
+            return new ListalListPage(this.fetch, this.page, this.namingStrategy, url, pageNumber);
         }
-        return new ListalPage(this.fetch, this.namingStrategy, url, pageNumber);
+        return new ListalPage(this.fetch, this.page, this.namingStrategy, url, pageNumber);
     }
 
     private isListPage(url: string): boolean {

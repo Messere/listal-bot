@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var downloader = require("image-downloader");
 var node_fetch_1 = require("node-fetch");
+var puppeteer = require("puppeteer");
 var queue = require("queue");
 var ArgumentParser_1 = require("./ArgumentParser");
 var ConsoleLogger_1 = require("./ConsoleLogger");
@@ -23,7 +24,7 @@ try {
         logger.log(argParser.getUsage());
     }
     else {
-        var main = new Main_1.default(logger, downloader, node_fetch_1.default, queue);
+        var main = new Main_1.default(logger, downloader, node_fetch_1.default, queue, puppeteer);
         main.run(args).then(function () {
             logger.log("\nFinished");
         }).catch(function (e) {

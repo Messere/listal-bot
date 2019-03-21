@@ -73,11 +73,11 @@ var ImageQueue = /** @class */ (function () {
                         return [3 /*break*/, 3];
                     case 2:
                         e_1 = _a.sent();
-                        this.logger.error(e_1);
+                        this.logger.error(e_1.message);
                         result = Promise.resolve();
                         imageUrl.retries += 1;
                         if (e_1.message.indexOf("Image loading error - 404.") !== -1) {
-                            this.logger.error("Giving up as image " + imageUrl.url + " does not exist.");
+                            this.logger.error("Giving up as image " + imageUrl.url + " does not exist");
                             this.imageStats.error++;
                         }
                         else if (imageUrl.retries < this.maxRetries) {

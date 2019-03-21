@@ -40,15 +40,16 @@ var ImageQueue_1 = require("./ImageQueue");
 var ListalFileNamingStrategy_1 = require("./ListalFileNamingStrategy");
 var ListalPageFactory_1 = require("./ListalPageFactory");
 var Main = /** @class */ (function () {
-    function Main(logger, downloader, fetch, queue) {
+    function Main(logger, downloader, fetch, queue, puppeteer) {
         this.logger = logger;
         this.downloader = downloader;
         this.fetch = fetch;
         this.queue = queue;
+        this.puppeteer = puppeteer;
     }
     Main.prototype.run = function (downloaderArguments) {
         return __awaiter(this, void 0, void 0, function () {
-            var imageStats, listalPageFactory, firstListalPage, imageQueue, pageQueue, totalPages, _loop_1, pageNumber;
+            var imageStats, browser, page, listalPageFactory, firstListalPage, imageQueue, pageQueue, totalPages, _loop_1, pageNumber;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -59,18 +60,24 @@ var Main = /** @class */ (function () {
                             success: 0,
                             total: 0,
                         };
-                        listalPageFactory = new ListalPageFactory_1.default(this.fetch, new ListalFileNamingStrategy_1.default());
+                        return [4 /*yield*/, this.puppeteer.launch({ headless: false, slowMo: 1000, defaultViewport: null })];
+                    case 1:
+                        browser = _a.sent();
+                        return [4 /*yield*/, browser.newPage()];
+                    case 2:
+                        page = _a.sent();
+                        listalPageFactory = new ListalPageFactory_1.default(this.fetch, page, new ListalFileNamingStrategy_1.default());
                         firstListalPage = listalPageFactory.getListalPage(downloaderArguments.url);
                         imageQueue = new ImageQueue_1.default(imageStats, new ImageDownloader_1.default(this.logger, this.downloader, this.getDestinationDir(firstListalPage, downloaderArguments), downloaderArguments.overwriteExisting), this.logger, this.queue, downloaderArguments.concurrentImageDownloadsNumber, downloaderArguments.timeoutSeconds, downloaderArguments.retries);
                         this.logger.log("Downloading " + (downloaderArguments.overwriteExisting ? "all" : "new") +
                             (" images of " + firstListalPage.getCategory() + " \"" + firstListalPage.getName() + "\""));
                         pageQueue = this.queue({
                             autostart: true,
-                            concurrency: downloaderArguments.concurrentPageDownloadsNumber,
-                            timeout: downloaderArguments.timeoutSeconds * 1000,
+                            concurrency: 1,
+                            timeout: downloaderArguments.timeoutSeconds * 5000,
                         });
                         return [4 /*yield*/, firstListalPage.getTotalPages()];
-                    case 1:
+                    case 3:
                         totalPages = _a.sent();
                         _loop_1 = function (pageNumber) {
                             pageQueue.push(function () { return __awaiter(_this, void 0, void 0, function () {
@@ -98,12 +105,23 @@ var Main = /** @class */ (function () {
                         return [2 /*return*/, new Promise(function (resolve) {
                                 var interval = setInterval(function () {
                                     // queues look empty
+                                    // console.log(`img q: ${imageQueue.length} page q ${pageQueue.length}`)
                                     if (imageQueue.length === 0 && pageQueue.length === 0) {
                                         // but give them some time...
                                         setTimeout(function () {
                                             // and check again
                                             if (imageQueue.length === 0 && pageQueue.length === 0) {
                                                 clearInterval(interval);
+                                                (function () { return __awaiter(_this, void 0, void 0, function () {
+                                                    return __generator(this, function (_a) {
+                                                        switch (_a.label) {
+                                                            case 0: return [4 /*yield*/, browser.close()];
+                                                            case 1:
+                                                                _a.sent();
+                                                                return [2 /*return*/];
+                                                        }
+                                                    });
+                                                }); })();
                                                 resolve();
                                             }
                                         }, 2);

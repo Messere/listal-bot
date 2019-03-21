@@ -2,6 +2,7 @@
 
 import * as downloader from "image-downloader";
 import fetch from "node-fetch";
+import * as puppeteer from 'puppeteer'
 import * as queue from "queue";
 import ArgumentParser from "./ArgumentParser";
 import ConsoleLogger from "./ConsoleLogger";
@@ -29,7 +30,7 @@ try {
 
     } else {
 
-        const main = new Main(logger, downloader, fetch, queue);
+        const main = new Main(logger, downloader, fetch, queue, puppeteer);
 
         main.run(args).then(() => {
             logger.log("\nFinished");

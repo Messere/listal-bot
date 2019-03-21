@@ -18,12 +18,14 @@
         "download"
     ],
     "dependencies": {
+        "@types/puppeteer": "^1.12.3",
         "command-line-args": "^5.0.2",
         "command-line-usage": "^5.0.5",
         "form-data": "^2.3.2",
         "image-downloader": "^3.4.1",
         "mkdirp": "^0.5.1",
         "node-fetch": "^2.1.2",
+        "puppeteer": "^1.13.0",
         "queue": "^4.4.2"
     },
     "devDependencies": {

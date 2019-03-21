@@ -49,9 +49,9 @@ var FormData = require("form-data");
 var ListalPage_1 = require("./ListalPage");
 var ListalListPage = /** @class */ (function (_super) {
     __extends(ListalListPage, _super);
-    function ListalListPage(fetch, namingStrategy, url, pageNumber) {
+    function ListalListPage(fetch, page, namingStrategy, url, pageNumber) {
         if (pageNumber === void 0) { pageNumber = 1; }
-        var _this = _super.call(this, fetch, namingStrategy, url, pageNumber) || this;
+        var _this = _super.call(this, fetch, page, namingStrategy, url, pageNumber) || this;
         _this.listIdRegexp = /data-listid='(\d+)'/;
         _this.itemTotalRegexp = /data-itemtotal='(\d+)'/;
         _this.itemsPerPage = 42;
