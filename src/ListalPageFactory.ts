@@ -1,19 +1,15 @@
 import IFileNamingStrategy from "./IFileNamingStrategy";
-import ListalListPage from "./ListalListPage";
 import ListalPage from "./ListalPage";
 
 export default class ListalPageFactory {
-    private fetch;
     private namingStrategy;
-    private page;
+    private fetch;
 
     constructor(
         fetch: any,
-        page: any,
         namingStrategy: IFileNamingStrategy,
     ) {
         this.fetch = fetch;
-        this.page = page
         this.namingStrategy = namingStrategy;
     }
 
@@ -23,9 +19,9 @@ export default class ListalPageFactory {
     ): ListalPage {
 
         if (this.isListPage(url)) {
-            return new ListalListPage(this.fetch, this.page, this.namingStrategy, url, pageNumber);
+            throw Error("Sorry, lists are currently not supported.");
         }
-        return new ListalPage(this.fetch, this.page, this.namingStrategy, url, pageNumber);
+        return new ListalPage(this.fetch, this.namingStrategy, url, pageNumber);
     }
 
     private isListPage(url: string): boolean {

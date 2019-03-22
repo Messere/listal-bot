@@ -4,7 +4,6 @@ import IImageInfo from "./IImageInfo";
 export default class ListalPage {
     protected pageNumber: number;
     protected fetch: any;
-    protected page: any;
     protected namingStrategy: IFileNamingStrategy;
     protected pageUrl: string;
 
@@ -24,14 +23,12 @@ export default class ListalPage {
 
     constructor(
         fetch: any,
-        page: any,
         namingStrategy: IFileNamingStrategy,
         url: string,
         pageNumber: number = 1,
     ) {
         this.pageNumber = pageNumber;
         this.fetch = fetch;
-        this.page = page;
         this.namingStrategy = namingStrategy;
         [this.category, this.name] = this.getTypeAndNameFromUrl(url);
 
@@ -107,21 +104,8 @@ export default class ListalPage {
     }
 
     protected async getPageContents(): Promise<string> {
-        if (this.page.url().match('/pictures[/]+' + this.pageNumber + '$')) {
-            this.pageContents = await this.page.content();
-        } else if (this.pageContents === undefined) {
-            if (this.page.url() != 'about:blank') {
-                console.log(`click ${this.pageNumber}`)
-                await this.page.click('a[href$="/pictures/'+this.pageNumber+'"]')
-                console.log('wait')
-                await this.page.waitForNavigation({waitUntil: 'load'})
-            } else {
-                console.log(`goto ${this.pageUrl}`)
-                await this.page.goto(this.pageUrl);
-                console.log('accept')
-                await this.page.click('button.qc-cmp-button')
-            }
-            this.pageContents = await this.page.content();
+        if (!this.pageContents) {
+            this.pageContents = await this.fetch(this.pageUrl);
         }
         return Promise.resolve(this.pageContents);
     }

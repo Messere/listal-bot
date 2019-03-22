@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var ListalPage = /** @class */ (function () {
-    function ListalPage(fetch, page, namingStrategy, url, pageNumber) {
+    function ListalPage(fetch, namingStrategy, url, pageNumber) {
         var _a;
         if (pageNumber === void 0) { pageNumber = 1; }
         this.imageUrlRegexp = /\/viewimage\/(\d+)/g;
@@ -47,7 +47,6 @@ var ListalPage = /** @class */ (function () {
         this.listalPersonPageRegexp = /https?:\/\/www\.listal\.com\/([^\/]+)/i;
         this.pageNumber = pageNumber;
         this.fetch = fetch;
-        this.page = page;
         this.namingStrategy = namingStrategy;
         _a = this.getTypeAndNameFromUrl(url), this.category = _a[0], this.name = _a[1];
         this.pageUrl = this.makePageUrl(this.category, this.name, this.pageNumber);
@@ -125,45 +124,17 @@ var ListalPage = /** @class */ (function () {
     };
     ListalPage.prototype.getPageContents = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, _b;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        if (!this.page.url().match('/pictures[/]+' + this.pageNumber + '$')) return [3 /*break*/, 2];
+                        if (!!this.pageContents) return [3 /*break*/, 2];
                         _a = this;
-                        return [4 /*yield*/, this.page.content()];
+                        return [4 /*yield*/, this.fetch(this.pageUrl)];
                     case 1:
-                        _a.pageContents = _c.sent();
-                        return [3 /*break*/, 10];
-                    case 2:
-                        if (!(this.pageContents === undefined)) return [3 /*break*/, 10];
-                        if (!(this.page.url() != 'about:blank')) return [3 /*break*/, 5];
-                        console.log("click " + this.pageNumber);
-                        return [4 /*yield*/, this.page.click('a[href$="/pictures/' + this.pageNumber + '"]')];
-                    case 3:
-                        _c.sent();
-                        console.log('wait');
-                        return [4 /*yield*/, this.page.waitForNavigation({ waitUntil: 'load' })];
-                    case 4:
-                        _c.sent();
-                        return [3 /*break*/, 8];
-                    case 5:
-                        console.log("goto " + this.pageUrl);
-                        return [4 /*yield*/, this.page.goto(this.pageUrl)];
-                    case 6:
-                        _c.sent();
-                        console.log('accept');
-                        return [4 /*yield*/, this.page.click('button.qc-cmp-button')];
-                    case 7:
-                        _c.sent();
-                        _c.label = 8;
-                    case 8:
-                        _b = this;
-                        return [4 /*yield*/, this.page.content()];
-                    case 9:
-                        _b.pageContents = _c.sent();
-                        _c.label = 10;
-                    case 10: return [2 /*return*/, Promise.resolve(this.pageContents)];
+                        _a.pageContents = _b.sent();
+                        _b.label = 2;
+                    case 2: return [2 /*return*/, Promise.resolve(this.pageContents)];
                 }
             });
         });

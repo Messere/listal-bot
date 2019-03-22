@@ -11,7 +11,7 @@
         "outDir": "dist",
         "pretty": true,
         // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/24419
-        "skipLibCheck": true,
+        "skipLibCheck": true
     },
     "include": [
         "src/**/*.ts"

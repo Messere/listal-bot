@@ -12,13 +12,12 @@ describe("Command line arguments", () => {
     it ("should parse short command line options", () => {
         const args = argumentParser.getArguments(
             ["-u", "abc", "-o", "xyz", "-h", "-x", "-t", "15", "-k", "-b",
-             "-c", "20", "-p", "30", "-r", "100", "-a", "-l", "10:100", "-v"],
+             "-c", "20", "-r", "100", "-a", "-l", "10:100", "-v"],
         );
         expect(args).toEqual({
             appendCategory: true,
             appendName: true,
             concurrentImageDownloadsNumber: 20,
-            concurrentPageDownloadsNumber: 30,
             destinationDir: "xyz",
             maxPageNumber: 100,
             minPageNumber: 10,
@@ -34,7 +33,7 @@ describe("Command line arguments", () => {
     it ("should parse long command line options", () => {
         const args = argumentParser.getArguments(
             ["--url", "abc", "--output", "xyz", "--help", "--overwrite", "--append-category",
-            "--timeout", "15", "--concurrency", "20", "--page-concurrency", "30",
+            "--timeout", "15", "--concurrency", "20",
             "--retries", "100", "--append-name", "--limit-to", "10:100",
             "--append-category-name", "--version"],
         );
@@ -42,7 +41,6 @@ describe("Command line arguments", () => {
             appendCategory: true,
             appendName: true,
             concurrentImageDownloadsNumber: 20,
-            concurrentPageDownloadsNumber: 30,
             destinationDir: "xyz",
             maxPageNumber: 100,
             minPageNumber: 10,

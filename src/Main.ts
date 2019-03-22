@@ -10,16 +10,14 @@ import ListalPageFactory from "./ListalPageFactory";
 export default class Main {
     private logger: ILogger;
     private downloader;
-    private fetch: any;
     private queue;
-    private puppeteer;
+    private fetch;
 
-    constructor(logger: ILogger, downloader: any, fetch: any, queue: any, puppeteer: any) {
+    constructor(logger: ILogger, downloader: any, fetch: any, queue: any) {
         this.logger = logger;
         this.downloader = downloader;
-        this.fetch = fetch;
         this.queue = queue;
-        this.puppeteer = puppeteer
+        this.fetch = fetch;
     }
 
     public async run(
@@ -33,12 +31,8 @@ export default class Main {
             total: 0,
         };
 
-        const browser = await this.puppeteer.launch({headless: false, slowMo: 1000, defaultViewport: null});
-        const page = await browser.newPage();
-
         const listalPageFactory = new ListalPageFactory(
             this.fetch,
-            page,
             new ListalFileNamingStrategy(),
         );
 
@@ -94,19 +88,15 @@ export default class Main {
         return new Promise((resolve) => {
             const interval = setInterval(() => {
                 // queues look empty
-                // console.log(`img q: ${imageQueue.length} page q ${pageQueue.length}`)
                 if (imageQueue.length === 0 && pageQueue.length === 0) {
                     // but give them some time...
                     setTimeout(() => {
                         // and check again
                         if (imageQueue.length === 0 && pageQueue.length === 0) {
                             clearInterval(interval);
-                            (async () => {
-                                await browser.close();
-                            })()
                             resolve();
                         }
-                    }, 2);
+                    }, 5);
                 }
             }, 1);
         });

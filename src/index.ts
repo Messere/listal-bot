@@ -1,11 +1,10 @@
 #! /usr/bin/env node
 
 import * as downloader from "image-downloader";
-import fetch from "node-fetch";
-import * as puppeteer from 'puppeteer'
 import * as queue from "queue";
 import ArgumentParser from "./ArgumentParser";
 import ConsoleLogger from "./ConsoleLogger";
+import fetch from "./Fetch";
 import Main from "./Main";
 import version from "./Version";
 
@@ -30,7 +29,7 @@ try {
 
     } else {
 
-        const main = new Main(logger, downloader, fetch, queue, puppeteer);
+        const main = new Main(logger, downloader, fetch, queue);
 
         main.run(args).then(() => {
             logger.log("\nFinished");
