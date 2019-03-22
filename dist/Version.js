@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var version = "0.5.5";
+var version = "1.0.0";
 exports.default = version;

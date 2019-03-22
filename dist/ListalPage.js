@@ -124,23 +124,17 @@ var ListalPage = /** @class */ (function () {
     };
     ListalPage.prototype.getPageContents = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var resource, _a;
+            var _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        if (!(this.pageContents === undefined)) return [3 /*break*/, 3];
+                        if (!!this.pageContents) return [3 /*break*/, 2];
+                        _a = this;
                         return [4 /*yield*/, this.fetch(this.pageUrl)];
                     case 1:
-                        resource = _b.sent();
-                        if (!resource.ok) {
-                            throw new Error("Failed to download listal page " + this.pageUrl + ", error: " + resource.statusText);
-                        }
-                        _a = this;
-                        return [4 /*yield*/, resource.text()];
-                    case 2:
                         _a.pageContents = _b.sent();
-                        _b.label = 3;
-                    case 3: return [2 /*return*/, Promise.resolve(this.pageContents)];
+                        _b.label = 2;
+                    case 2: return [2 /*return*/, Promise.resolve(this.pageContents)];
                 }
             });
         });

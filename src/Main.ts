@@ -10,14 +10,14 @@ import ListalPageFactory from "./ListalPageFactory";
 export default class Main {
     private logger: ILogger;
     private downloader;
-    private fetch;
     private queue;
+    private fetch;
 
     constructor(logger: ILogger, downloader: any, fetch: any, queue: any) {
         this.logger = logger;
         this.downloader = downloader;
-        this.fetch = fetch;
         this.queue = queue;
+        this.fetch = fetch;
     }
 
     public async run(
@@ -60,8 +60,8 @@ export default class Main {
 
         const pageQueue = this.queue({
             autostart: true,
-            concurrency: downloaderArguments.concurrentPageDownloadsNumber,
-            timeout: downloaderArguments.timeoutSeconds * 1000,
+            concurrency: 1,
+            timeout: downloaderArguments.timeoutSeconds * 5000,
         });
 
         const totalPages = await firstListalPage.getTotalPages();
@@ -96,7 +96,7 @@ export default class Main {
                             clearInterval(interval);
                             resolve();
                         }
-                    }, 2);
+                    }, 5);
                 }
             }, 1);
         });
