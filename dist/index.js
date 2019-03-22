@@ -5,9 +5,9 @@ var downloader = require("image-downloader");
 var queue = require("queue");
 var ArgumentParser_1 = require("./ArgumentParser");
 var ConsoleLogger_1 = require("./ConsoleLogger");
+var Fetch_1 = require("./Fetch");
 var Main_1 = require("./Main");
 var Version_1 = require("./Version");
-var Fetch_1 = require("./Fetch");
 var logger = new ConsoleLogger_1.default();
 var argParser = new ArgumentParser_1.default();
 try {
