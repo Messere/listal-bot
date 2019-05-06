@@ -91,6 +91,17 @@ var ArgumentParser = /** @class */ (function () {
                 typeLabel: "<number>",
             },
             {
+                alias: "p",
+                defaultValue: DownloaderArgumentsDefaults_1.default.concurrentPageDownloadsNumber,
+                description: "number of concurrent page downloads (default: " + DownloaderArgumentsDefaults_1.default.concurrentPageDownloadsNumber + ")",
+                name: "page-concurrency",
+                type: function (value) {
+                    var parsedValue = parseInt(value, 10);
+                    return isNaN(parsedValue) ? DownloaderArgumentsDefaults_1.default.concurrentPageDownloadsNumber : parsedValue;
+                },
+                typeLabel: "<number>",
+            },
+            {
                 alias: "r",
                 defaultValue: DownloaderArgumentsDefaults_1.default.retries,
                 description: "maximum number of retries after image download error (default: " + DownloaderArgumentsDefaults_1.default.retries + ")",
@@ -119,6 +130,7 @@ var ArgumentParser = /** @class */ (function () {
             appendCategory: options["append-category"] || options["append-category-name"],
             appendName: options["append-name"] || options["append-category-name"],
             concurrentImageDownloadsNumber: options.concurrency,
+            concurrentPageDownloadsNumber: options["page-concurrency"],
             destinationDir: options.output,
             overwriteExisting: options.overwrite,
             retries: options.retries,

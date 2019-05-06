@@ -93,6 +93,17 @@ export default class ArgumentParser {
             typeLabel: "<number>",
         },
         {
+            alias: "p",
+            defaultValue: defaults.concurrentPageDownloadsNumber,
+            description: `number of concurrent page downloads (default: ${defaults.concurrentPageDownloadsNumber})`,
+            name: "page-concurrency",
+            type: (value) => {
+                const parsedValue = parseInt(value, 10);
+                return isNaN(parsedValue) ? defaults.concurrentPageDownloadsNumber : parsedValue;
+            },
+            typeLabel: "<number>",
+        },
+        {
             alias: "r",
             defaultValue: defaults.retries,
             description: `maximum number of retries after image download error (default: ${defaults.retries})`,
@@ -125,6 +136,7 @@ export default class ArgumentParser {
             appendCategory: options["append-category"] || options["append-category-name"],
             appendName: options["append-name"] || options["append-category-name"],
             concurrentImageDownloadsNumber: options.concurrency,
+            concurrentPageDownloadsNumber: options["page-concurrency"],
             destinationDir: options.output,
             overwriteExisting: options.overwrite,
             retries: options.retries,

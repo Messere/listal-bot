@@ -14,7 +14,7 @@ Downloading new images of person "marilyn-monroe"
  15% [=====>                         ] Done 1113 of 7418 (saved: 1113, errors: 0)
 ```
 
-as well as images from other categories (sorry, lists are not supported at the moment):
+as well as images from other categories (including lists):
 
 ```bash
 $ listal-bot -u http://www.listal.com/movie/batman -o ./batman-pictures
@@ -63,6 +63,7 @@ Options
   -v, --version                     show program version
   -t, --timeout <seconds>           image download timeout in seconds (default: 5)
   -c, --concurrency <number>        number of concurrent image downloads (default: 6)
+  -p, --page-concurrency <number>   number of concurrent page downloads (default: 3)
   -r, --retries <number>            maximum number of retries after image download error (default: 5)
 ```
 

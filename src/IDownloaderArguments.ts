@@ -8,6 +8,7 @@ export default interface IDownloaderArguments {
     overwriteExisting: boolean;
     retries: number;
     concurrentImageDownloadsNumber: number;
+    concurrentPageDownloadsNumber: number;
     timeoutSeconds: number;
     minPageNumber: number;
     maxPageNumber: number;

@@ -1,10 +1,10 @@
 #! /usr/bin/env node
 
 import * as downloader from "image-downloader";
+import fetch from "node-fetch";
 import * as queue from "queue";
 import ArgumentParser from "./ArgumentParser";
 import ConsoleLogger from "./ConsoleLogger";
-import fetch from "./Fetch";
 import Main from "./Main";
 import version from "./Version";
 
