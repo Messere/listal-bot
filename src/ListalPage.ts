@@ -104,12 +104,8 @@ export default class ListalPage {
     }
 
     protected async getPageContents(): Promise<string> {
-        if (this.pageContents === undefined) {
-            const resource = await this.fetch(this.pageUrl);
-            if (!resource.ok) {
-                throw new Error(`Failed to download listal page ${this.pageUrl}, error: ${resource.statusText}`);
-            }
-            this.pageContents = await resource.text();
+        if (!this.pageContents) {
+            this.pageContents = await this.fetch(this.pageUrl);
         }
         return Promise.resolve(this.pageContents);
     }

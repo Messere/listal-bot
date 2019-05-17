@@ -9,22 +9,12 @@ describe("Listal page", () => {
 
     beforeEach(() => {
         namingStrategy = new ListalFileNamingStrategy();
-        fetchPerson = () => {
-            return Promise.resolve({
-                ok: true,
-                text: () => Promise.resolve(
-                    readFile.sync("tests/fixtures/listal-page-person.html").toString(),
-                ),
-            });
-        };
-        fetchOther = () => {
-            return Promise.resolve({
-                ok: true,
-                text: () => Promise.resolve(
-                    readFile.sync("tests/fixtures/listal-page-other.html").toString(),
-                ),
-            });
-        };
+        fetchPerson = (url: string) => Promise.resolve(
+            readFile.sync("tests/fixtures/listal-page-person.html").toString(),
+        );
+        fetchOther = (url: string) => Promise.resolve(
+            readFile.sync("tests/fixtures/listal-page-other.html").toString(),
+        );
     });
 
     it("should properly get page name, category and url from person url", () => {

@@ -9,7 +9,9 @@
         "noUnusedLocals": true,
         "lib": ["es2015"],
         "outDir": "dist",
-        "pretty": true
+        "pretty": true,
+        // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/24419
+        "skipLibCheck": true
     },
     "include": [
         "src/**/*.ts"

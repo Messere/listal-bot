@@ -43,8 +43,8 @@ var Main = /** @class */ (function () {
     function Main(logger, downloader, fetch, queue) {
         this.logger = logger;
         this.downloader = downloader;
-        this.fetch = fetch;
         this.queue = queue;
+        this.fetch = fetch;
     }
     Main.prototype.run = function (downloaderArguments) {
         return __awaiter(this, void 0, void 0, function () {
@@ -66,8 +66,8 @@ var Main = /** @class */ (function () {
                             (" images of " + firstListalPage.getCategory() + " \"" + firstListalPage.getName() + "\""));
                         pageQueue = this.queue({
                             autostart: true,
-                            concurrency: downloaderArguments.concurrentPageDownloadsNumber,
-                            timeout: downloaderArguments.timeoutSeconds * 1000,
+                            concurrency: 1,
+                            timeout: downloaderArguments.timeoutSeconds * 5000,
                         });
                         return [4 /*yield*/, firstListalPage.getTotalPages()];
                     case 1:
@@ -106,7 +106,7 @@ var Main = /** @class */ (function () {
                                                 clearInterval(interval);
                                                 resolve();
                                             }
-                                        }, 2);
+                                        }, 5);
                                     }
                                 }, 1);
                             })];
