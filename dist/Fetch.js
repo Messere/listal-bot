@@ -36,28 +36,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-var puppeteer = require("puppeteer");
+var cloudscraper = require("cloudscraper");
 var fetch = function (url) { return __awaiter(_this, void 0, void 0, function () {
-    var browser, page, pageContents;
     return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, puppeteer.launch({ headless: true })];
-            case 1:
-                browser = _a.sent();
-                return [4 /*yield*/, browser.newPage()];
-            case 2:
-                page = _a.sent();
-                return [4 /*yield*/, page.goto(url)];
-            case 3:
-                _a.sent();
-                return [4 /*yield*/, page.content()];
-            case 4:
-                pageContents = _a.sent();
-                return [4 /*yield*/, browser.close()];
-            case 5:
-                _a.sent();
-                return [2 /*return*/, Promise.resolve(pageContents)];
-        }
+        return [2 /*return*/, cloudscraper.get(url)];
     });
 }); };
 exports.default = fetch;
