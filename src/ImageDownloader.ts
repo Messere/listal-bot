@@ -1,6 +1,5 @@
 import { existsSync, lstatSync } from "fs";
 import { sync as mkdirSync } from "mkdirp";
-import certificates from "./Certificates";
 import IImageInfo from "./IImageInfo";
 import ILogger from "./ILogger";
 
@@ -27,7 +26,6 @@ export default class ImageDownloader {
         const destination = this.destinationDirectory + "/" + imageInfo.fileName;
         if (this.overwriteExistingImages || !existsSync(destination)) {
             return this.downloader.image({
-                ca: certificates,
                 dest: destination,
                 timeout: timeout * 1000,
                 url: imageInfo.url,

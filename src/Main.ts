@@ -94,7 +94,7 @@ export default class Main {
                         // and check again
                         if (imageQueue.length === 0 && pageQueue.length === 0) {
                             clearInterval(interval);
-                            resolve();
+                            resolve(null);
                         }
                     }, 5);
                 }

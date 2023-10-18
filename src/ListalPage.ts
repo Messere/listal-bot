@@ -8,10 +8,10 @@ export default class ListalPage {
     protected pageUrl: string;
 
     protected readonly imageUrlRegexp = /\/viewimage\/(\d+)/g;
-    protected readonly fullImageUrlPattern = "http://ilarge.lisimg.com/image/{imageId}/10000full-{name}.jpg";
+    protected readonly fullImageUrlPattern = "https://ilarge.lisimg.com/image/{imageId}/10000full-{name}.jpg";
 
-    private readonly pageUrlPattern = "http://www.listal.com/{type}/{name}/pictures/{pageNumber}";
-    private readonly pagePersonUrlPattern = "http://www.listal.com/{name}/pictures//{pageNumber}";
+    private readonly pageUrlPattern = "https://www.listal.com/{type}/{name}/pictures/{pageNumber}";
+    private readonly pagePersonUrlPattern = "https://www.listal.com/{name}/pictures/{pageNumber}";
     private readonly listalPageRegexp = /https?:\/\/www\.listal\.com\/([a-z_-]+)\/([^\/]+)/i;
     private readonly listalPersonPageRegexp = /https?:\/\/www\.listal\.com\/([^\/]+)/i;
 

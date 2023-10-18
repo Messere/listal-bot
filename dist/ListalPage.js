@@ -40,9 +40,9 @@ var ListalPage = /** @class */ (function () {
         var _a;
         if (pageNumber === void 0) { pageNumber = 1; }
         this.imageUrlRegexp = /\/viewimage\/(\d+)/g;
-        this.fullImageUrlPattern = "http://ilarge.lisimg.com/image/{imageId}/10000full-{name}.jpg";
-        this.pageUrlPattern = "http://www.listal.com/{type}/{name}/pictures/{pageNumber}";
-        this.pagePersonUrlPattern = "http://www.listal.com/{name}/pictures//{pageNumber}";
+        this.fullImageUrlPattern = "https://ilarge.lisimg.com/image/{imageId}/10000full-{name}.jpg";
+        this.pageUrlPattern = "https://www.listal.com/{type}/{name}/pictures/{pageNumber}";
+        this.pagePersonUrlPattern = "https://www.listal.com/{name}/pictures/{pageNumber}";
         this.listalPageRegexp = /https?:\/\/www\.listal\.com\/([a-z_-]+)\/([^\/]+)/i;
         this.listalPersonPageRegexp = /https?:\/\/www\.listal\.com\/([^\/]+)/i;
         this.pageNumber = pageNumber;

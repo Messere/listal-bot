@@ -37,7 +37,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs_1 = require("fs");
 var mkdirp_1 = require("mkdirp");
-var Certificates_1 = require("./Certificates");
 var ImageDownloader = /** @class */ (function () {
     function ImageDownloader(logger, downloader, destinationDirectory, overwriteExistingImages) {
         if (overwriteExistingImages === void 0) { overwriteExistingImages = false; }
@@ -54,7 +53,6 @@ var ImageDownloader = /** @class */ (function () {
                 destination = this.destinationDirectory + "/" + imageInfo.fileName;
                 if (this.overwriteExistingImages || !fs_1.existsSync(destination)) {
                     return [2 /*return*/, this.downloader.image({
-                            ca: Certificates_1.default,
                             dest: destination,
                             timeout: timeout * 1000,
                             url: imageInfo.url,

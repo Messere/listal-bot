@@ -39,7 +39,7 @@ npm install listal-bot -g
 ```bash
 $ listal-bot --help
 
-listal-bot 0.5.2
+listal-bot 1.2.2
 
   Download all images from listal page.
 
